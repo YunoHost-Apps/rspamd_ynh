@@ -9,6 +9,8 @@ description.fr = "Système pour filtrer les spams"
 
 version = "3.9.0~ynh1"
 
+maintainers = []
+
 [upstream]
 license = "Apache-2.0"
 website = "https://rspamd.com/"
