@@ -1,0 +1,11 @@
+#!/bin/bash
+
+action=$1
+pending_dir=$4
+postfix_main_cf="${pending_dir}/../postfix/etc/postfix/main.cf"
+
+[[ "$action" == "pre" ]] || exit 0
+[[ -e "$postfix_main_cf" ]] || exit 0
+
+# Append rspamd milter (port 11332) to smtpd_milter
+sed 's@\(^smtpd_milter.*\)@\1 inet:localhost:11332@g' -i $postfix_main_cf
