@@ -13,7 +13,7 @@ fi
 
 ynh_script_progression --message="Removing $app sources..."
 
-apt remove rspamd
+dpkg -r rspamd || true
 
 ynh_script_progression --message="Removing system configurations related to $app..."
 
