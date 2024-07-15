@@ -42,4 +42,4 @@ ram.runtime = "50M"
     [resources.permissions]
 
     [resources.apt]
-    packages = "libhyperscan5, postfix, libsodium23, libsqlite3-0, libssl3, libarchive13"
+    packages = "redis-server, libhyperscan5, postfix, libsodium23, libsqlite3-0, libssl3, libarchive13"

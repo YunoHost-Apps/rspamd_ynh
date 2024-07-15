@@ -17,9 +17,15 @@ dpkg -r rspamd || true
 
 ynh_script_progression --message="Removing system configurations related to $app..."
 
+# Remove postfix conf tweak
 ynh_secure_remove /usr/share/yunohost/hooks/conf_regen/99-postfix_rspamd
 yunohost tools regen-conf postfix
 ynh_systemd_action --service_name=postfix --action="restart"
+
+# Remove dovecot conf
+ynh_secure_remove /etc/dovecot/global_script/rspamd.sieve
+ynh_secure_remove /etc/dovecot/yunohost.d/post-ext.d/antispam.conf
+ynh_systemd_action --service_name=dovecot --action="restart"
 
 ynh_remove_logrotate
 

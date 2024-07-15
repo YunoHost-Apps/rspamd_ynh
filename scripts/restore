@@ -7,6 +7,16 @@ source /usr/share/yunohost/helpers
 
 ynh_script_progression --message="Restoring system configurations related to $app..."
 
+ynh_restore_file --origin_path="/usr/share/yunohost/hooks/conf_regen/99-postfix_rspamd"
+yunohost tools regen-conf postfix
+ynh_systemd_action --service_name=postfix --action="restart"
+
+ynh_restore_file --origin_path="/etc/dovecot/global_script/rspamd.sieve"
+ynh_restore_file --origin_path="/etc/dovecot/yunohost.d/post-ext.d/antispam.conf"
+sievec /etc/dovecot/global_script/rspamd.sieve
+chown -R vmail:mail /etc/dovecot/global_script
+ynh_systemd_action --service_name=dovecot --action="restart"
+
 ynh_restore_file --origin_path="/etc/rspamd"
 
 ynh_restore_file --origin_path="/etc/logrotate.d/$app"
