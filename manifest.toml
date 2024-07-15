@@ -1,5 +1,4 @@
 #:schema https://raw.githubusercontent.com/YunoHost/apps/master/schemas/manifest.v2.schema.json
-
 packaging_format = 2
 
 id = "rspamd"
@@ -9,6 +8,8 @@ description.en = "Spam filtering system"
 description.fr = "Système pour filtrer les spams"
 
 version = "3.9.0~ynh1"
+
+maintainers = []
 
 [upstream]
 license = "Apache-2.0"
@@ -39,7 +40,6 @@ ram.runtime = "50M"
     rename = "rspamd.deb"
 
     [resources.permissions]
-    main.url = null
 
     [resources.apt]
-    packages = "libhyperscan5 (>= 5.4.0), libicu72 (>= 72.1~rc-1~), libpcre2-8-0 (>= 10.22), libsodium23 (>= 0.6.1), libsqlite3-0 (>= 3.7.15), libssl3 (>= 3.0.0), libstdc++6 (>= 11), zlib1g (>= 1:1.2.0) "
+    packages = "redis-server, libhyperscan5, postfix, libsodium23, libsqlite3-0, libssl3, libarchive13"
