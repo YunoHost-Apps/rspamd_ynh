@@ -11,6 +11,9 @@ ynh_restore_file --src_path="/etc/rspamd"
 
 ynh_restore_file --origin_path="/etc/logrotate.d/$app"
 
+# Integrate rspamd in YunoHost service list
+yunohost service add $app --description="Spam filtering system"
+
 #=================================================
 # END OF SCRIPT
 #=================================================
