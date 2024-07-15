@@ -7,7 +7,7 @@ source /usr/share/yunohost/helpers
 
 ynh_script_progression --message="Restoring system configurations related to $app..."
 
-ynh_restore_file --src_path="/etc/rspamd"
+ynh_restore_file --origin_path="/etc/rspamd"
 
 ynh_restore_file --origin_path="/etc/logrotate.d/$app"
 
