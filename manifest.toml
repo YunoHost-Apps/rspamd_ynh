@@ -40,4 +40,4 @@ ram.runtime = "50M"
     [resources.permissions]
 
     [resources.apt]
-    packages = "libhyperscan5 (>= 5.4.0), libicu72 (>= 72.1~rc-1~), libpcre2-8-0 (>= 10.22), libsodium23 (>= 0.6.1), libsqlite3-0 (>= 3.7.15), libssl3 (>= 3.0.0), libstdc++6 (>= 11), zlib1g (>= 1:1.2.0) "
+    packages = "libhyperscan5, postfix, libsodium23, libsqlite3-0, libssl3"
