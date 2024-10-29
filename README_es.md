@@ -32,7 +32,7 @@ According to this spam score and the user’s settings, Rspamd recommends an act
 
 ## Información para desarrolladores
 
-Por favor enviar sus correcciones a la [`branch testing`](https://github.com/YunoHost-Apps/rspamd_ynh/tree/testing
+Por favor enviar sus correcciones a la [rama `testing`](https://github.com/YunoHost-Apps/rspamd_ynh/tree/testing).
 
 Para probar la rama `testing`, sigue asÍ:
 
