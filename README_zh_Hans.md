@@ -5,7 +5,9 @@
 
 # YunoHost 上的 Rspamd
 
-[![集成程度](https://dash.yunohost.org/integration/rspamd.svg)](https://ci-apps.yunohost.org/ci/apps/rspamd/) ![工作状态](https://ci-apps.yunohost.org/ci/badges/rspamd.status.svg) ![维护状态](https://ci-apps.yunohost.org/ci/badges/rspamd.maintain.svg)
+[![集成程度](https://apps.yunohost.org/badge/integration/rspamd)](https://ci-apps.yunohost.org/ci/apps/rspamd/)
+![工作状态](https://apps.yunohost.org/badge/state/rspamd)
+![维护状态](https://apps.yunohost.org/badge/maintained/rspamd)
 
 [![使用 YunoHost 安装 Rspamd](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=rspamd)
 
@@ -21,7 +23,7 @@ Rspamd is an advanced spam filtering system that allows evaluation of messages b
 According to this spam score and the user’s settings, Rspamd recommends an action for the MTA to apply to the message, for example, to pass, reject or add a header. Rspamd is designed to process hundreds of messages per second simultaneously, and provides a number of useful features.
 
 
-**分发版本：** 3.9.0~ynh1
+**分发版本：** 3.11.0~ynh1
 ## 文档与资源
 
 - 官方应用网站： <https://rspamd.com/>

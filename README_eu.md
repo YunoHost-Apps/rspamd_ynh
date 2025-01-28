@@ -5,7 +5,9 @@ EZ editatu eskuz.
 
 # Rspamd YunoHost-erako
 
-[![Integrazio maila](https://dash.yunohost.org/integration/rspamd.svg)](https://ci-apps.yunohost.org/ci/apps/rspamd/) ![Funtzionamendu egoera](https://ci-apps.yunohost.org/ci/badges/rspamd.status.svg) ![Mantentze egoera](https://ci-apps.yunohost.org/ci/badges/rspamd.maintain.svg)
+[![Integrazio maila](https://apps.yunohost.org/badge/integration/rspamd)](https://ci-apps.yunohost.org/ci/apps/rspamd/)
+![Funtzionamendu egoera](https://apps.yunohost.org/badge/state/rspamd)
+![Mantentze egoera](https://apps.yunohost.org/badge/maintained/rspamd)
 
 [![Instalatu Rspamd YunoHost-ekin](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=rspamd)
 
@@ -21,7 +23,7 @@ Rspamd is an advanced spam filtering system that allows evaluation of messages b
 According to this spam score and the user’s settings, Rspamd recommends an action for the MTA to apply to the message, for example, to pass, reject or add a header. Rspamd is designed to process hundreds of messages per second simultaneously, and provides a number of useful features.
 
 
-**Paketatutako bertsioa:** 3.9.0~ynh1
+**Paketatutako bertsioa:** 3.11.0~ynh1
 ## Dokumentazioa eta baliabideak
 
 - Aplikazioaren webgune ofiziala: <https://rspamd.com/>
