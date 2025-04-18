@@ -23,7 +23,7 @@ Rspamd is an advanced spam filtering system that allows evaluation of messages b
 According to this spam score and the user’s settings, Rspamd recommends an action for the MTA to apply to the message, for example, to pass, reject or add a header. Rspamd is designed to process hundreds of messages per second simultaneously, and provides a number of useful features.
 
 
-**Поставляемая версия:** 3.11.0~ynh1
+**Поставляемая версия:** 3.11.1~ynh1
 ## Документация и ресурсы
 
 - Официальный веб-сайт приложения: <https://rspamd.com/>

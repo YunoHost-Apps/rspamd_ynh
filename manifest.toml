@@ -7,7 +7,7 @@ name = "Rspamd"
 description.en = "Spam filtering system"
 description.fr = "Système pour filtrer les spams"
 
-version = "3.11.0~ynh1"
+version = "3.11.1~ynh1"
 
 maintainers = []
 
@@ -32,14 +32,14 @@ ram.runtime = "50M"
 [resources]
 
     [resources.sources.main]
-    amd64.url = "https://rspamd.com/apt-stable/pool/main/r/rspamd/rspamd_3.11.0-1~90a175b45~bookworm_amd64.deb"
-    amd64.sha256 = "07f58ad4cc6e41b035166ffe3b39fe73fc2fd85af54dafcb85f1bcc2d3d0c58e"
-    arm64.url = "https://rspamd.com/apt-stable/pool/main/r/rspamd/rspamd_3.11.0-1~90a175b45~bookworm_arm64.deb"
-    arm64.sha256 = "64b977c96f8a5cf8a2274e003b0789c67a018092799aadc09136095a1ced9a38"
+    amd64.url = "https://rspamd.com/apt-stable/pool/main/r/rspamd/rspamd_3.11.1-1~ab0b44951~bookworm_amd64.deb"
+    amd64.sha256 = "6cf97d07cf4c0fb8d4b1c4c7ee0d8877a3d446b35c20fa5bee429b12f9bb8f57"
+    arm64.url = "https://rspamd.com/apt-stable/pool/main/r/rspamd/rspamd_3.11.1-1~ab0b44951~bookworm_arm64.deb"
+    arm64.sha256 = "4b2cf62bc6f128bc8b57f9a189b87701986a3fa010ffec6fc2a271399b47fd6d"
     extract = false
     rename = "rspamd.deb"
 
     [resources.permissions]
 
     [resources.apt]
-    packages = "redis-server, libhyperscan5, postfix, libsodium23, libsqlite3-0, libssl3, libarchive13"
+    packages = "redis-server, libhyperscan5, postfix, libsodium23, libsqlite3-0, libssl3, libarchive13, libbinutils"
