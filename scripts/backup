@@ -3,19 +3,19 @@
 source /usr/share/yunohost/helpers
 
 #=================================================
+# BACKUP SYSTEM CONFIGURATION
+#=================================================
 
-ynh_print_info --message="Declaring files to be backed up..."
+ynh_backup "/usr/share/yunohost/hooks/conf_regen/99-postfix_rspamd"
+ynh_backup "/etc/dovecot/global_script/rspamd.sieve"
+ynh_backup "/etc/dovecot/yunohost.d/post-ext.d/antispam.conf"
 
-ynh_backup --src_path="/usr/share/yunohost/hooks/conf_regen/99-postfix_rspamd"
-ynh_backup --src_path="/etc/dovecot/global_script/rspamd.sieve"
-ynh_backup --src_path="/etc/dovecot/yunohost.d/post-ext.d/antispam.conf"
+ynh_backup "/etc/rspamd"
 
-ynh_backup --src_path="/etc/rspamd"
-
-ynh_backup --src_path="/etc/logrotate.d/$app"
+ynh_backup "/etc/logrotate.d/$app"
 
 #=================================================
 # END OF SCRIPT
 #=================================================
 
-ynh_print_info --message="Backup script completed for $app. (YunoHost will then actually copy those files to the archive)."
+ynh_print_info "Backup script completed for $app. (YunoHost will then actually copy those files to the archive)."
