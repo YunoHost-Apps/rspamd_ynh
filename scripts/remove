@@ -7,26 +7,26 @@ source /usr/share/yunohost/helpers
 #=================================================
 ynh_script_progression "Removing system configurations related to $app..."
 
-if ynh_exec_warn_less yunohost service status $app >/dev/null; then
+if ynh_hide_warnings yunohost service status $app >/dev/null; then
 	yunohost service remove $app
 fi
 
 dpkg -r rspamd || true
 
 # Remove postfix conf tweak
-ynh_secure_remove /usr/share/yunohost/hooks/conf_regen/99-postfix_rspamd
+ynh_safe_rm /usr/share/yunohost/hooks/conf_regen/99-postfix_rspamd
 yunohost tools regen-conf postfix
-ynh_systemd_action --service_name=postfix --action="restart"
+ynh_systemctl --service=postfix --action="restart"
 
 # Remove dovecot conf
-ynh_secure_remove /etc/dovecot/global_script/rspamd.sieve
-ynh_secure_remove /etc/dovecot/yunohost.d/post-ext.d/antispam.conf
-ynh_systemd_action --service_name=dovecot --action="restart"
+ynh_safe_rm /etc/dovecot/global_script/rspamd.sieve
+ynh_safe_rm /etc/dovecot/yunohost.d/post-ext.d/antispam.conf
+ynh_systemctl --service=dovecot --action="restart"
 
-ynh_remove_logrotate
+ynh_config_remove_logrotate
 
 #=================================================
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Removal of $app completed" --last
+ynh_script_progression "Removal of $app completed"
