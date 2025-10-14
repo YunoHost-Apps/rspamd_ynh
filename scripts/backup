@@ -3,8 +3,8 @@
 source /usr/share/yunohost/helpers
 
 #=================================================
-
-ynh_print_info "Declaring files to be backed up..."
+# BACKUP SYSTEM CONFIGURATION
+#=================================================
 
 ynh_backup "/usr/share/yunohost/hooks/conf_regen/99-postfix_rspamd"
 ynh_backup "/etc/dovecot/global_script/rspamd.sieve"
