@@ -39,7 +39,7 @@ cp ../conf/dovecot_antispam.conf /etc/dovecot/yunohost.d/post-ext.d/antispam.con
 ynh_systemctl --service=dovecot --action="restart"
 
 # Use logrotate to manage application logfile(s)
-ynh_config_add_logrotate
+#ynh_config_add_logrotate
 
 # Integrate rspamd in YunoHost service list
 yunohost service add $app --description="Spam filtering system"
