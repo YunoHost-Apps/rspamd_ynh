@@ -22,20 +22,20 @@ fi
 #=================================================
 ynh_script_progression "Adding system configurations related to $app..."
 
-ynh_config_add --template="redis.conf" --destination="/etc/rspamd/local.d/redis.conf"
+cp ../conf/redis.conf /etc/rspamd/local.d/redis.conf
 ynh_systemctl --service=rspamd --action="restart"
 
 # Add postfix configuration hook and regen postfix conf
-ynh_config_add --template="postfix_regenconf_hook" --destination="/usr/share/yunohost/hooks/conf_regen/99-postfix_rspamd"
+cp ../conf/postfix_regenconf_hook /usr/share/yunohost/hooks/conf_regen/99-postfix_rspamd
 yunohost tools regen-conf postfix
 ynh_systemctl --service=postfix --action="restart"
 
 # Add dovecot conf
-ynh_config_add --template="dovecot_sieve.conf" --destination="/etc/dovecot/global_script/rspamd.sieve"
+cp ../conf/dovecot_sieve.conf /etc/dovecot/global_script/rspamd.sieve
 sievec /etc/dovecot/global_script/rspamd.sieve
 chown -R vmail:mail /etc/dovecot/global_script
 
-ynh_config_add --template="dovecot_antispam.conf" --destination="/etc/dovecot/yunohost.d/post-ext.d/antispam.conf"
+cp ../conf/dovecot_antispam.conf /etc/dovecot/yunohost.d/post-ext.d/antispam.conf
 ynh_systemctl --service=dovecot --action="restart"
 
 # Use logrotate to manage application logfile(s)

@@ -49,8 +49,6 @@ ram.runtime = "50M"
     arm64.sha256 = "45bfadabbb052564b9abc14e5ed30a92795344aff525e86b6f7fd850ddf8d6d9"
     extract = false
     rename = "rspamd.deb"
-
-    [resources.system_user]
     
     [resources.permissions]
 
