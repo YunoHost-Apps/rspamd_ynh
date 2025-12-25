@@ -42,6 +42,8 @@ ram.runtime = "50M"
     extract = false
     rename = "rspamd.deb"
 
+    [resources.system_user]
+    
     [resources.permissions]
 
     [resources.apt]
