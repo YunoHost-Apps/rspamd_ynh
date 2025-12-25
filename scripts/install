@@ -11,10 +11,10 @@ tmp_dir=$(mktemp -d)
 
 if [[ $YNH_DEBIAN_VERSION == "bookworm" ]]; then
     ynh_setup_source --dest_dir="$tmp_dir" --source_id="bookworm"
-	pkg -i $tmp_dir/rspamd.deb
+	dpkg -i $tmp_dir/rspamd.deb
 elif [[ $YNH_DEBIAN_VERSION == "trixie" ]]; then
     ynh_setup_source --dest_dir="$tmp_dir" --source_id="trixie"
-	pkg -i $tmp_dir/rspamd.deb
+	dpkg -i $tmp_dir/rspamd.deb
 fi
 
 #=================================================
