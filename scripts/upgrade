@@ -5,12 +5,17 @@ source /usr/share/yunohost/helpers
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
-ynh_script_progression "Setting up rspamd..."
+ynh_script_progression "Setting up $app..."
 
 tmp_dir=$(mktemp -d)
 
-ynh_setup_source --dest_dir="$tmp_dir"
-dpkg -i $tmp_dir/rspamd.deb
+if [[ $YNH_DEBIAN_VERSION == "bookworm" ]]; then
+    ynh_setup_source --dest_dir="$tmp_dir" --source_id="bookworm"
+	pkg -i $tmp_dir/rspamd.deb
+elif [[ $YNH_DEBIAN_VERSION == "trixie" ]]; then
+    ynh_setup_source --dest_dir="$tmp_dir" --source_id="trixie"
+	pkg -i $tmp_dir/rspamd.deb
+fi
 
 #=================================================
 # SYSTEM CONFIGURATION
