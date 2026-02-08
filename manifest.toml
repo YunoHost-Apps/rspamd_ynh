@@ -18,7 +18,8 @@ admindoc = "https://rspamd.com/doc"
 code = "https://github.com/rspamd/rspamd"
 
 [integration]
-yunohost = '>= 12.0'
+yunohost = '>= 12.1.17'
+helpers_version = "2.1"
 architectures = ["amd64", "arm64"]
 multi_instance = false
 
@@ -33,14 +34,22 @@ ram.runtime = "50M"
 
 [resources]
 
-    [resources.sources.main]
+    [resources.sources.trixie]
+    amd64.url = "https://rspamd.com/apt-stable/pool/main/r/rspamd/rspamd_3.14.2-1~e6f401a~trixie_amd64.deb"
+    amd64.sha256 = "000e1e4887fff31c5b01af98c6645082ebcbbb7c245af4c33c58f368f87ded07"
+    arm64.url = "https://rspamd.com/apt-stable/pool/main/r/rspamd/rspamd_3.14.2-1~e6f401a~trixie_arm64.deb"
+    arm64.sha256 = "7b9e4dd724496d18b542a9e0d76a66434aa32fa83d93b56fb83df56e6ad8fbdb"
+    extract = false
+    rename = "rspamd.deb"
+
+    [resources.sources.bookworm]
     amd64.url = "https://rspamd.com/apt-stable/pool/main/r/rspamd/rspamd_3.14.2-1~e6f401a~bookworm_amd64.deb"
     amd64.sha256 = "1e1729775bf566089ec2bb8a0c8c187c71b5f1a5330b4a9a07ca9ff2abe2395f"
     arm64.url = "https://rspamd.com/apt-stable/pool/main/r/rspamd/rspamd_3.14.2-1~e6f401a~bookworm_arm64.deb"
     arm64.sha256 = "45bfadabbb052564b9abc14e5ed30a92795344aff525e86b6f7fd850ddf8d6d9"
     extract = false
     rename = "rspamd.deb"
-
+    
     [resources.permissions]
 
     [resources.apt]

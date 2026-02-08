@@ -5,34 +5,42 @@ source /usr/share/yunohost/helpers
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
-ynh_script_progression --message="Setting up rspamd..."
+ynh_script_progression "Setting up $app..."
 
-tmp_dir=$(mktemp -d) 
-ynh_setup_source --dest_dir="$tmp_dir"
-dpkg -i $tmp_dir/rspamd.deb
+tmp_dir=$(mktemp -d)
+
+if [[ $YNH_DEBIAN_VERSION == "bookworm" ]]; then
+    ynh_setup_source --dest_dir="$tmp_dir" --source_id="bookworm"
+	dpkg -i $tmp_dir/rspamd.deb
+elif [[ $YNH_DEBIAN_VERSION == "trixie" ]]; then
+    ynh_setup_source --dest_dir="$tmp_dir" --source_id="trixie"
+	dpkg -i $tmp_dir/rspamd.deb
+fi
 
 #=================================================
 # SYSTEM CONFIGURATION
 #=================================================
-ynh_script_progression --message="Adding system configurations related to $app..."
+ynh_script_progression "Adding system configurations related to $app..."
 
 cp ../conf/redis.conf /etc/rspamd/local.d/redis.conf
-ynh_systemd_action --service_name=rspamd --action="restart"
+ynh_systemctl --service=rspamd --action="restart"
 
 # Add postfix configuration hook and regen postfix conf
-cp -R ../conf/postfix_regenconf_hook /usr/share/yunohost/hooks/conf_regen/99-postfix_rspamd
+cp ../conf/postfix_regenconf_hook /usr/share/yunohost/hooks/conf_regen/99-postfix_rspamd
 yunohost tools regen-conf postfix
-ynh_systemd_action --service_name=postfix --action="restart"
+ynh_systemctl --service=postfix --action="restart"
 
 # Add dovecot conf
 cp ../conf/dovecot_sieve.conf /etc/dovecot/global_script/rspamd.sieve
 sievec /etc/dovecot/global_script/rspamd.sieve
 chown -R vmail:mail /etc/dovecot/global_script
+
 cp ../conf/dovecot_antispam.conf /etc/dovecot/yunohost.d/post-ext.d/antispam.conf
-ynh_systemd_action --service_name=dovecot --action="restart"
+ynh_systemctl --service=dovecot --action="restart"
 
 # Use logrotate to manage application logfile(s)
-ynh_use_logrotate
+# disable it for now because it creates an issue were it want to chown rspamd: but rspamd user doesn’t exist
+#ynh_config_add_logrotate
 
 # Integrate rspamd in YunoHost service list
 yunohost service add $app --description="Spam filtering system"
@@ -41,4 +49,4 @@ yunohost service add $app --description="Spam filtering system"
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Upgrade of $app completed" --last
+ynh_script_progression "Upgrade of $app completed"
