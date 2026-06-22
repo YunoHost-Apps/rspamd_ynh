@@ -7,7 +7,7 @@ name = "Rspamd"
 description.en = "Spam filtering system"
 description.fr = "Système pour filtrer les spams"
 
-version = "4.1.1~ynh1"
+version = "4.1.1~ynh2"
 
 maintainers = []
 

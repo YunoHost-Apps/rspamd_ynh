@@ -12,7 +12,12 @@ ynh_backup "/etc/dovecot/yunohost.d/post-ext.d/antispam.conf"
 
 ynh_backup "/etc/rspamd"
 
-ynh_backup "/etc/logrotate.d/$app"
+# logrotate is currently not configured by install/upgrade (ynh_config_add_logrotate
+# is commented out), so this file may not exist. Only back it up if present, otherwise
+# ynh_backup aborts and breaks the pre-upgrade safety backup.
+if [ -e "/etc/logrotate.d/$app" ]; then
+    ynh_backup "/etc/logrotate.d/$app"
+fi
 
 #=================================================
 # END OF SCRIPT
