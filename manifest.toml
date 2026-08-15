@@ -7,7 +7,7 @@ name = "Rspamd"
 description.en = "Spam filtering system"
 description.fr = "Système pour filtrer les spams"
 
-version = "4.1.4~ynh1"
+version = "4.1.5~ynh1"
 
 maintainers = []
 
@@ -35,18 +35,18 @@ ram.runtime = "50M"
 [resources]
 
     [resources.sources.trixie]
-    amd64.url = "https://rspamd.com/apt-stable/pool/main/r/rspamd/rspamd_4.1.4-1~beb659b~trixie_amd64.deb"
-    amd64.sha256 = "5740291809bdd4d00818d08f3512ecd8da7fbe6f5b33de7bed616c46619f5203"
-    arm64.url = "https://rspamd.com/apt-stable/pool/main/r/rspamd/rspamd_4.1.4-1~beb659b~trixie_arm64.deb"
-    arm64.sha256 = "1cb2194eac47d009250fa7a0771fb677d45a044c9fa8bdde61b4c5afcdc7e1f9"
+    amd64.url = "https://rspamd.com/apt-stable/pool/main/r/rspamd/rspamd_4.1.5-1~9a291a4~trixie_amd64.deb"
+    amd64.sha256 = "0b2d7a53db33a76e5cbc53ad1ba99574ddeb6d1164bc628af9f4a5e2dd98b34e"
+    arm64.url = "https://rspamd.com/apt-stable/pool/main/r/rspamd/rspamd_4.1.5-1~9a291a4~trixie_arm64.deb"
+    arm64.sha256 = "ee0be0c9c97de320f23f56f865e3ed33ba6f30ddcc0ff20de5e16c366abb4de6"
     extract = false
     rename = "rspamd.deb"
 
     [resources.sources.bookworm]
-    amd64.url = "https://rspamd.com/apt-stable/pool/main/r/rspamd/rspamd_4.1.4-1~beb659b~bookworm_amd64.deb"
-    amd64.sha256 = "2ee2420daa875235e61a116e27882f85f13bcdab4cb920effbd81de662587d27"
-    arm64.url = "https://rspamd.com/apt-stable/pool/main/r/rspamd/rspamd_4.1.4-1~beb659b~bookworm_arm64.deb"
-    arm64.sha256 = "a5070ec50a3b6ffc6fedee438d046d9b18d3676e84b019df7ba9e9575875efe1"
+    amd64.url = "https://rspamd.com/apt-stable/pool/main/r/rspamd/rspamd_4.1.5-1~9a291a4~bookworm_amd64.deb"
+    amd64.sha256 = "937c3cac5bb0f1e0b09adc69820d0ba3f988dea36db669d246f92006493df7e3"
+    arm64.url = "https://rspamd.com/apt-stable/pool/main/r/rspamd/rspamd_4.1.5-1~9a291a4~bookworm_arm64.deb"
+    arm64.sha256 = "22c5570be0aa53c36a5f844e2b56cd549251dcce27f3f87b12ea582b8f3a2de5"
     extract = false
     rename = "rspamd.deb"
     
