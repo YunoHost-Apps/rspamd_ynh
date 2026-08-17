@@ -11,10 +11,10 @@ tmp_dir=$(mktemp -d)
 
 if [[ $YNH_DEBIAN_VERSION == "bookworm" ]]; then
     ynh_setup_source --dest_dir="$tmp_dir" --source_id="bookworm"
-	dpkg -i $tmp_dir/rspamd.deb
+	DEBIAN_FRONTEND=noninteractive dpkg -i --force-confdef --force-confold $tmp_dir/rspamd.deb
 elif [[ $YNH_DEBIAN_VERSION == "trixie" ]]; then
     ynh_setup_source --dest_dir="$tmp_dir" --source_id="trixie"
-	dpkg -i $tmp_dir/rspamd.deb
+	DEBIAN_FRONTEND=noninteractive dpkg -i --force-confdef --force-confold $tmp_dir/rspamd.deb
 fi
 
 #=================================================
