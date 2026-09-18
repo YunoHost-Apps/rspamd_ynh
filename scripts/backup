@@ -16,8 +16,10 @@ ynh_backup "/usr/lib/dovecot/sieve/rspamd-learn-ham.sh"
 
 ynh_backup "/etc/rspamd"
 
-# logrotate config may not exist if it was never enabled
-if [ -f "/etc/logrotate.d/$app" ]; then
+# logrotate is currently not configured by install/upgrade (ynh_config_add_logrotate
+# is commented out), so this file may not exist. Only back it up if present, otherwise
+# ynh_backup aborts and breaks the pre-upgrade safety backup.
+if [ -e "/etc/logrotate.d/$app" ]; then
     ynh_backup "/etc/logrotate.d/$app"
 fi
 

@@ -24,7 +24,11 @@ ynh_systemctl --service=dovecot --action="restart"
 
 ynh_restore "/etc/rspamd"
 
-ynh_restore "/etc/logrotate.d/$app"
+# Only restore the logrotate config if it is present in the backup archive
+# (see scripts/backup — it may be absent because logrotate is not configured).
+if [ -e "$YNH_CWD/etc/logrotate.d/$app" ]; then
+    ynh_restore "/etc/logrotate.d/$app"
+fi
 
 # Integrate rspamd in YunoHost service list
 yunohost service add $app --description="Spam filtering system"
