@@ -7,7 +7,7 @@ name = "Rspamd"
 description.en = "Spam filtering system"
 description.fr = "Système pour filtrer les spams"
 
-version = "4.1.5~ynh1"
+version = "4.2.0~ynh1"
 
 maintainers = []
 
@@ -18,7 +18,7 @@ admindoc = "https://rspamd.com/doc"
 code = "https://github.com/rspamd/rspamd"
 
 [integration]
-yunohost = '>= 12.1.17'
+yunohost = '>= 12.1.41'
 helpers_version = "2.1"
 architectures = ["amd64", "arm64"]
 multi_instance = false
