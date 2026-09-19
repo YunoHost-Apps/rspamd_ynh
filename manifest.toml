@@ -53,4 +53,11 @@ ram.runtime = "50M"
     [resources.permissions]
 
     [resources.apt]
-    packages = "redis-server, libhyperscan5, postfix, libsodium23, libsqlite3-0, libssl3, libarchive13, libbinutils"
+    packages = "redis-server, libhyperscan5, postfix, libsodium23, libsqlite3-0"
+    packages_from_raw_bash = """
+        if [[ "$(lsb_release -sc)" == "trixie" ]]; then
+            echo "libssl3t64, libarchive13t64, libicu76, libbinutils"
+        else
+            echo "libssl3, libarchive13, libicu72, libbinutils"
+        fi
+    """

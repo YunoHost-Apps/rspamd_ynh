@@ -9,6 +9,10 @@ source /usr/share/yunohost/helpers
 ynh_backup "/usr/share/yunohost/hooks/conf_regen/99-postfix_rspamd"
 ynh_backup "/etc/dovecot/global_script/rspamd.sieve"
 ynh_backup "/etc/dovecot/yunohost.d/post-ext.d/antispam.conf"
+ynh_backup "/usr/lib/dovecot/sieve/report-spam.sieve"
+ynh_backup "/usr/lib/dovecot/sieve/report-ham.sieve"
+ynh_backup "/usr/lib/dovecot/sieve/rspamd-learn-spam.sh"
+ynh_backup "/usr/lib/dovecot/sieve/rspamd-learn-ham.sh"
 
 ynh_backup "/etc/rspamd"
 

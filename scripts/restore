@@ -13,8 +13,13 @@ ynh_systemctl --service=postfix --action="restart"
 
 ynh_restore "/etc/dovecot/global_script/rspamd.sieve"
 ynh_restore "/etc/dovecot/yunohost.d/post-ext.d/antispam.conf"
+ynh_restore "/usr/lib/dovecot/sieve/report-spam.sieve"
+ynh_restore "/usr/lib/dovecot/sieve/report-ham.sieve"
+ynh_restore "/usr/lib/dovecot/sieve/rspamd-learn-spam.sh"
+ynh_restore "/usr/lib/dovecot/sieve/rspamd-learn-ham.sh"
 sievec /etc/dovecot/global_script/rspamd.sieve
 chown -R vmail:mail /etc/dovecot/global_script
+chmod +x /usr/lib/dovecot/sieve/rspamd-learn-spam.sh /usr/lib/dovecot/sieve/rspamd-learn-ham.sh
 ynh_systemctl --service=dovecot --action="restart"
 
 ynh_restore "/etc/rspamd"
