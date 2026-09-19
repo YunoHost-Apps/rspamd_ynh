@@ -11,11 +11,15 @@ tmp_dir=$(mktemp -d)
 
 if [[ $YNH_DEBIAN_VERSION == "bookworm" ]]; then
     ynh_setup_source --dest_dir="$tmp_dir" --source_id="bookworm"
-	dpkg -i $tmp_dir/rspamd.deb
 elif [[ $YNH_DEBIAN_VERSION == "trixie" ]]; then
     ynh_setup_source --dest_dir="$tmp_dir" --source_id="trixie"
-	dpkg -i $tmp_dir/rspamd.deb
 fi
+
+# Install the packages
+_ynh_apt_install --allow-downgrades "$tmp_dir/rspamd.deb"
+
+# Add the package to dependencies
+YNH_APT_INSTALL_DEPENDENCIES_REPLACE="false" ynh_apt_install_dependencies "rspamd"
 
 #=================================================
 # SYSTEM CONFIGURATION

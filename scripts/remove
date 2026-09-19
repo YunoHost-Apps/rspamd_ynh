@@ -11,8 +11,6 @@ if ynh_hide_warnings yunohost service status $app >/dev/null; then
 	yunohost service remove $app
 fi
 
-dpkg -r rspamd || true
-
 # Remove postfix conf tweak
 ynh_safe_rm /usr/share/yunohost/hooks/conf_regen/99-postfix_rspamd
 yunohost tools regen-conf postfix
