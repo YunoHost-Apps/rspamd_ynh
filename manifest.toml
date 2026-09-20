@@ -45,7 +45,7 @@ ram.runtime = "50M"
 [resources]
     [resources.sources.main]
     url = "https://github.com/rspamd/rspamd/archive/refs/tags/4.2.0.tar.gz"
-    sha256 = ""
+    sha256 = "d1f5739410ee7c084a5d109d7d7f25b682f6ce43bbae25e089b66c029cd08434"
 
     autoupdate.strategy = "latest_github_release"
     
@@ -53,7 +53,7 @@ ram.runtime = "50M"
 
     [resources.ports]
     main.default = 11332
-    main fixed = true
+    main.fixed = true
     web.default = 11334
     web.fixed = true
 
