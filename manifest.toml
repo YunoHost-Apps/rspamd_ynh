@@ -50,6 +50,7 @@ ram.runtime = "50M"
     autoupdate.strategy = "latest_github_release"
     
     [resources.permissions]
+    main.url = "/"
 
     [resources.ports]
     main.default = 11332
