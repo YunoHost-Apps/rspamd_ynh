@@ -6,15 +6,12 @@ source /usr/share/yunohost/helpers
 # BACKUP SYSTEM CONFIGURATION
 #=================================================
 
-ynh_backup "/usr/share/yunohost/hooks/conf_regen/99-postfix_rspamd"
-ynh_backup "/etc/dovecot/global_script/rspamd.sieve"
-ynh_backup "/etc/dovecot/yunohost.d/post-ext.d/antispam.conf"
-ynh_backup "/usr/lib/dovecot/sieve/report-spam.sieve"
-ynh_backup "/usr/lib/dovecot/sieve/report-ham.sieve"
-ynh_backup "/usr/lib/dovecot/sieve/rspamd-learn-spam.sh"
-ynh_backup "/usr/lib/dovecot/sieve/rspamd-learn-ham.sh"
+ynh_backup "/etc/nginx/conf.d/$domain.d/$app.conf"
 
-ynh_backup "/etc/rspamd"
+ynh_backup "/etc/rspamd/local.d/redis.conf"
+ynh_backup "/usr/share/yunohost/hooks/conf_regen/99-postfix_rspamd"
+ynh_backup "/etc/dovecot/yunohost.d/post-ext.d/antispam.conf"
+ynh_backup "/etc/dovecot/sieve"
 
 # logrotate is currently not configured by install/upgrade (ynh_config_add_logrotate
 # is commented out), so this file may not exist. Only back it up if present, otherwise

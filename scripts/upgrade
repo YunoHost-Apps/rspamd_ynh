@@ -3,29 +3,24 @@
 source /usr/share/yunohost/helpers
 
 #=================================================
-# DOWNLOAD, CHECK AND UNPACK SOURCE
+# ENSURE DOWNWARD COMPATIBILITY
 #=================================================
-ynh_script_progression "Setting up $app..."
+ynh_script_progression "Ensuring downward compatibility..."
 
-tmp_dir=$(mktemp -d)
-
-if [[ $YNH_DEBIAN_VERSION == "bookworm" ]]; then
-    ynh_setup_source --dest_dir="$tmp_dir" --source_id="bookworm"
-elif [[ $YNH_DEBIAN_VERSION == "trixie" ]]; then
-    ynh_setup_source --dest_dir="$tmp_dir" --source_id="trixie"
+if ynh_app_upgrading_from_version_before 4.2.0~ynh1
+then
+    ynh_safe_rm "/etc/dovecot/global_script/rspamd.{sieve,svbin}"
+    ynh_safe_rm "/etc/dovecot/yunohost.d/post-ext.d/antispam.conf"
 fi
-
-# Install the packages
-_ynh_apt_install --allow-downgrades "$tmp_dir/rspamd.deb"
-
-# Add the package to dependencies
-YNH_APT_INSTALL_DEPENDENCIES_REPLACE="false" ynh_apt_install_dependencies "rspamd"
 
 #=================================================
 # SYSTEM CONFIGURATION
 #=================================================
 ynh_script_progression "Adding system configurations related to $app..."
 
+ynh_config_add_nginx
+
+# Add redis
 ynh_config_add --template="redis.conf" --destination="/etc/rspamd/local.d/redis.conf"
 ynh_systemctl --service=rspamd --action="restart"
 
@@ -35,32 +30,40 @@ yunohost tools regen-conf postfix
 ynh_systemctl --service=postfix --action="restart"
 
 # Add dovecot conf
-ynh_config_add --template="dovecot_sieve.conf" --destination="/etc/dovecot/global_script/rspamd.sieve"
-sievec /etc/dovecot/global_script/rspamd.sieve
-chown -R vmail:mail /etc/dovecot/global_script
-
-# Deploy imap_sieve scripts for spam/ham learning
-mkdir -p /usr/lib/dovecot/sieve
-ynh_config_add --template="report-spam.sieve" --destination="/usr/lib/dovecot/sieve/report-spam.sieve"
-ynh_config_add --template="report-ham.sieve" --destination="/usr/lib/dovecot/sieve/report-ham.sieve"
-ynh_config_add --template="rspamd-learn-spam.sh" --destination="/usr/lib/dovecot/sieve/rspamd-learn-spam.sh"
-ynh_config_add --template="rspamd-learn-ham.sh" --destination="/usr/lib/dovecot/sieve/rspamd-learn-ham.sh"
-chmod +x /usr/lib/dovecot/sieve/rspamd-learn-spam.sh /usr/lib/dovecot/sieve/rspamd-learn-ham.sh
-
+## Add the config file for spam handling
 if [[ $YNH_DEBIAN_VERSION == "bookworm" ]]; then
     ynh_config_add --template="dovecot_imap_sieve_bookworm.conf" --destination="/etc/dovecot/yunohost.d/post-ext.d/antispam.conf"
 elif [[ $YNH_DEBIAN_VERSION == "trixie" ]]; then
     ynh_config_add --template="dovecot_imap_sieve_trixie.conf" --destination="/etc/dovecot/yunohost.d/post-ext.d/antispam.conf"
 fi
 
+## Add the sieve script to move Spam mails to the user's Junk folder
+ynh_config_add --template="rspamd.sieve" --destination="/etc/dovecot/sieve/rspamd.sieve"
+
+## Deploy imap_sieve scripts for spam/ham learning
+### Spam learning
+ynh_config_add --template="report-spam.sieve" --destination="/etc/dovecot/sieve/report-spam.sieve"
+ynh_config_add --template="rspamd-learn-spam.sh" --destination="/etc/dovecot/sieve/rspamd-learn-spam.sh"
+
+### Ham learning
+ynh_config_add --template="report-ham.sieve" --destination="/etc/dovecot/sieve/report-ham.sieve"
+ynh_config_add --template="rspamd-learn-ham.sh" --destination="/etc/dovecot/sieve/rspamd-learn-ham.sh"
+
+## Compile sieve scripts
+sievec "/etc/dovecot/sieve/rspamd.sieve"
+sievec "/etc/dovecot/sieve/report-spam.sieve"
+sievec "/etc/dovecot/sieve/report-ham.sieve"
+
+## Set permissions
+chown -R vmail:mail "/etc/dovecot/sieve"
+chmod -R u=rw,go= "/etc/dovecot/sieve"
+chmod u+x "/etc/dovecot/sieve/rspamd-learn-{spam,ham}.sh"
+
+## Restart dovecot
 ynh_systemctl --service=dovecot --action="restart"
 
-# Use logrotate to manage application logfile(s)
-# disable it for now because it creates an issue were it want to chown rspamd: but rspamd user doesn’t exist
-#ynh_config_add_logrotate
-
 # Integrate rspamd in YunoHost service list
-yunohost service add $app --description="Spam filtering system"
+yunohost service add "$app" --description="Spam filtering system"
 
 #=================================================
 # END OF SCRIPT
