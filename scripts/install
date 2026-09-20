@@ -52,7 +52,8 @@ sievec "/etc/dovecot/sieve/report-ham.sieve"
 ## Set permissions
 chown -R vmail:mail "/etc/dovecot/sieve"
 chmod -R u=rw,go= "/etc/dovecot/sieve"
-chmod u+x "/etc/dovecot/sieve/rspamd-learn-{spam,ham}.sh"
+chmod u+x "/etc/dovecot/sieve/rspamd-learn-spam.sh"
+chmod u+x "/etc/dovecot/sieve/rspamd-learn-ham.sh"
 
 ## Restart dovecot to load the new sieve scripts
 ynh_systemctl --service=dovecot --action="restart"

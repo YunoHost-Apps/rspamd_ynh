@@ -19,7 +19,8 @@ ynh_restore "/etc/dovecot/sieve"
 
 chown -R vmail:mail "/etc/dovecot/sieve"
 chmod -R u=rw,go= "/etc/dovecot/sieve"
-chmod u+x "/etc/dovecot/sieve/rspamd-learn-{spam,ham}.sh"
+chmod u+x "/etc/dovecot/sieve/rspamd-learn-spam.sh"
+chmod u+x "/etc/dovecot/sieve/rspamd-learn-ham.sh"
 
 ynh_systemctl --service=dovecot --action="restart"
 
