@@ -37,6 +37,9 @@ elif [[ $YNH_DEBIAN_VERSION == "trixie" ]]; then
     ynh_config_add --template="dovecot_imap_sieve_trixie.conf" --destination="/etc/dovecot/yunohost.d/post-ext.d/antispam.conf"
 fi
 
+## Restart dovecot to load the new conf
+ynh_systemctl --service=dovecot --action="restart"
+
 ## Add the sieve script to move Spam mails to the user's Junk folder
 ynh_config_add --template="rspamd.sieve" --destination="/etc/dovecot/sieve/rspamd.sieve"
 
@@ -59,7 +62,7 @@ chown -R vmail:mail "/etc/dovecot/sieve"
 chmod -R u=rw,go= "/etc/dovecot/sieve"
 chmod u+x "/etc/dovecot/sieve/rspamd-learn-{spam,ham}.sh"
 
-## Restart dovecot
+## Restart dovecot to load the new sieve scripts
 ynh_systemctl --service=dovecot --action="restart"
 
 # Integrate rspamd in YunoHost service list
