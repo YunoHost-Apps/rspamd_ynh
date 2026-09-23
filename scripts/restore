@@ -30,7 +30,7 @@ ynh_restore "/etc/rspamd/local.d/classifier-bayes.conf"
 ynh_restore "/etc/rspamd/local.d/worker-controller.inc"
 chmod 644 /etc/rspamd/local.d/*
 
-ynh_restore "/etc/dovecot/yunohost.d/post-ext.d/antispam.conf"
+ynh_restore "/etc/dovecot/yunohost.d/post-ext.d/rspamd-learning.conf"
 ynh_restore "/etc/dovecot/global_script/rspamd-spam-to-junk-folder.sieve"
 ynh_restore "/etc/dovecot/global_script/rspamd-report-spam.sieve"
 ynh_restore "/usr/lib/dovecot/sieve-pipe/rspamd-learn-spam.sh"

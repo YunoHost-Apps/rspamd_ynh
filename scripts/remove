@@ -30,7 +30,7 @@ then
 fi
 
 # Remove dovecot conf
-ynh_safe_rm "/etc/dovecot/yunohost.d/post-ext.d/antispam.conf"
+ynh_safe_rm "/etc/dovecot/yunohost.d/post-ext.d/rspamd-learning.conf"
 ynh_safe_rm "/etc/dovecot/global_script/rspamd-spam-to-junk-folder.sieve"
 ynh_safe_rm "/etc/dovecot/global_script/rspamd-report-spam.sieve"
 ynh_safe_rm "/usr/lib/dovecot/sieve-pipe/rspamd-learn-spam.sh"

@@ -26,7 +26,7 @@ ynh_backup "/etc/rspamd/local.d/redis.conf"
 ynh_backup "/etc/rspamd/local.d/classifier-bayes.conf"
 ynh_backup "/etc/rspamd/local.d/worker-controller.inc"
 
-ynh_backup "/etc/dovecot/yunohost.d/post-ext.d/antispam.conf"
+ynh_backup "/etc/dovecot/yunohost.d/post-ext.d/rspamd-learning.conf"
 ynh_backup "/etc/dovecot/global_script/rspamd-spam-to-junk-folder.sieve"
 ynh_backup "/etc/dovecot/global_script/rspamd-report-spam.sieve"
 ynh_backup "/usr/lib/dovecot/sieve-pipe/rspamd-learn-spam.sh"
