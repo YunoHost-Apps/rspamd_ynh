@@ -20,7 +20,7 @@ elif [[ $YNH_DEBIAN_VERSION == "trixie" ]]; then
 fi
 
 # Install the packages
-_ynh_apt_install --allow-downgrades "$tmp_dir/rspamd.deb"
+#_ynh_apt_install --allow-downgrades "$tmp_dir/rspamd.deb"
 
 # Add the package to dependencies
 YNH_APT_INSTALL_DEPENDENCIES_REPLACE="false" ynh_apt_install_dependencies "rspamd"
