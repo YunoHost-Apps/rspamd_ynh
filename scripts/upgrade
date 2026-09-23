@@ -123,6 +123,17 @@ ynh_systemctl --service=rspamd --action=restart
 ynh_systemctl --service=dovecot --action=restart
 
 #=================================================
+# START SYSTEMD SERVICE
+#=================================================
+ynh_script_progression "Starting $app's systemd service..."
+
+ynh_systemctl --service=postfix --action=restart
+
+ynh_systemctl --service=rspamd --action=restart
+
+ynh_systemctl --service=dovecot --action=restart
+
+#=================================================
 # END OF SCRIPT
 #=================================================
 

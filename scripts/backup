@@ -16,8 +16,6 @@ then
     ynh_backup "/etc/nginx/conf.d/$domain.d/$app.conf"
 fi
 
-ynh_backup "/etc/logrotate.d/$app"
-
 #=================================================
 # BACKUP VARIOUS FILES
 #=================================================
