@@ -86,19 +86,6 @@ ynh_config_add_nginx
 
 yunohost service add "$app" --description="Spam filtering system"
 
-ynh_config_add_logrotate
-
-#=================================================
-# START SYSTEMD SERVICE
-#=================================================
-ynh_script_progression "Starting $app's systemd service..."
-
-ynh_systemctl --service=postfix --action=restart
-
-ynh_systemctl --service=rspamd --action=restart
-
-ynh_systemctl --service=dovecot --action=restart
-
 #=================================================
 # START SYSTEMD SERVICE
 #=================================================
