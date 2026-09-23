@@ -12,7 +12,7 @@ source /usr/share/yunohost/helpers
 ynh_script_progression "Removing system configurations related to $app..."
 
 if ynh_hide_warnings yunohost service status $app >/dev/null; then
-	yunohost service remove $app
+    yunohost service remove $app
 fi
 
 ynh_config_remove_nginx
@@ -22,7 +22,7 @@ ynh_safe_rm "/etc/rspamd/local.d/redis.conf"
 ynh_safe_rm "/etc/rspamd/local.d/classifier-bayes.conf"
 if [ -e "/etc/rspamd/local.d/worker-controller.inc" ]
 then
-	ynh_safe_rm "/etc/rspamd/local.d/worker-controller.inc"
+    ynh_safe_rm "/etc/rspamd/local.d/worker-controller.inc"
 fi
 
 # Remove postfix conf tweak
@@ -47,3 +47,10 @@ ynh_systemctl --service=dovecot --action=restart
 #=================================================
 
 ynh_script_progression "Removal of $app completed"
+
+#FIXME
+apt-cache policy rspamd
+systemctl status rspamd.service
+ss -tlnp | grep 11332
+
+
