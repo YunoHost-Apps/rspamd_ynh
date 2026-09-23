@@ -38,7 +38,11 @@ yunohost tools regen-conf postfix
 ## Add redis conf
 ynh_config_add --template="rspamd_redis.conf" --destination="/etc/rspamd/local.d/redis.conf"
 
-## Add per-user conf
+## Add per_user conf
+case "$per_user" in
+    0) per_user_value="false" ;;
+    1) per_user_value="true" ;;
+esac
 ynh_config_add --template="rspamd_classifier-bayes.conf" --destination="/etc/rspamd/local.d/classifier-bayes.conf"
 
 ## Set web interface password

@@ -20,6 +20,10 @@ ynh_config_remove_nginx
 # Remove rspamd conf
 ynh_safe_rm "/etc/rspamd/local.d/redis.conf"
 ynh_safe_rm "/etc/rspamd/local.d/classifier-bayes.conf"
+if [ -e "/etc/rspamd/local.d/worker-controller.inc" ]
+then
+	ynh_safe_rm "/etc/rspamd/local.d/worker-controller.inc"
+fi
 
 # Remove postfix conf tweak
 ynh_safe_rm "/usr/share/yunohost/hooks/conf_regen/99-postfix_rspamd"

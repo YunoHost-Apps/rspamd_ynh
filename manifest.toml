@@ -43,17 +43,14 @@ ram.runtime = "50M"
     help.en = "This corresponds to the password for Rspamd web interface access."
 
     [install.per_user]
+    ask.en = "Enable per user classifier."
     type = "boolean"
-    help.en = "Enable per user classifier."
-    default = 0
-    yes = true
-    no = false
+    default = false
 
     [install.min_learns]
+    ask.en = "Minimum learn to count for both spam and ham classes to perform classification."
     type = "number"
-    help.en = "Minimum learn to count for both spam and ham classes to perform classification."
     default = 200
-    min = 10
 
     [install.init_main_permission]
     type = "group"
