@@ -31,9 +31,12 @@ ynh_restore "/etc/rspamd/local.d/worker-controller.inc"
 chmod 644 /etc/rspamd/local.d/*
 
 ynh_restore "/etc/dovecot/yunohost.d/post-ext.d/antispam.conf"
-ynh_restore "/etc/dovecot/sieve"
-chmod 755 /etc/dovecot/sieve
-chmod 644 /etc/dovecot/sieve/*.{sieve,svbin}
+ynh_restore "/etc/dovecot/global_script/rspamd-spam-to-junk-folder.sieve"
+ynh_restore "/etc/dovecot/global_script/rspamd-report-spam.sieve"
+ynh_restore "/usr/lib/dovecot/sieve-pipe/rspamd-learn-spam.sh"
+ynh_restore "/etc/dovecot/global_script/rspamd-report-ham.sieve"
+ynh_restore "/usr/lib/dovecot/sieve-pipe/rspamd-learn-ham.sh"
+chmod 750 /etc/dovecot/global_script/*.sieve
 chmod 755 /usr/lib/dovecot/sieve-pipe/rspamd-learn-*.sh
 
 #=================================================

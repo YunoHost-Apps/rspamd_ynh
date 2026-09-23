@@ -17,6 +17,10 @@ fi
 
 ynh_config_remove_nginx
 
+# Remove postfix conf tweak
+ynh_safe_rm "/usr/share/yunohost/hooks/conf_regen/99-postfix_rspamd"
+yunohost tools regen-conf postfix
+
 # Remove rspamd conf
 ynh_safe_rm "/etc/rspamd/local.d/redis.conf"
 ynh_safe_rm "/etc/rspamd/local.d/classifier-bayes.conf"
@@ -25,14 +29,13 @@ then
     ynh_safe_rm "/etc/rspamd/local.d/worker-controller.inc"
 fi
 
-# Remove postfix conf tweak
-ynh_safe_rm "/usr/share/yunohost/hooks/conf_regen/99-postfix_rspamd"
-yunohost tools regen-conf postfix
-
 # Remove dovecot conf
 ynh_safe_rm "/etc/dovecot/yunohost.d/post-ext.d/antispam.conf"
-ynh_safe_rm "/etc/dovecot/sieve"
-ynh_safe_rm "/usr/lib/dovecot/sieve-pipe"
+ynh_safe_rm "/etc/dovecot/global_script/rspamd-spam-to-junk-folder.sieve"
+ynh_safe_rm "/etc/dovecot/global_script/rspamd-report-spam.sieve"
+ynh_safe_rm "/usr/lib/dovecot/sieve-pipe/rspamd-learn-spam.sh"
+ynh_safe_rm "/etc/dovecot/global_script/rspamd-report-ham.sieve"
+ynh_safe_rm "/usr/lib/dovecot/sieve-pipe/rspamd-learn-ham.sh"
 
 #=================================================
 # START SYSTEMD SERVICE
@@ -47,16 +50,3 @@ ynh_systemctl --service=dovecot --action=restart
 #=================================================
 
 ynh_script_progression "Removal of $app completed"
-
-#FIXME
-apt-cache policy rspamd
-systemctl status rspamd.service
-ss -tlnp | grep 11332
-apt depends rspamd-ynh-deps
-apt-cache rdepends --installed rspamd
-ynh_apt_remove_dependencies
-apt-cache policy rspamd
-apt depends rspamd-ynh-deps
-apt-cache rdepends --installed rspamd
-
-
