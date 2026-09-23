@@ -45,7 +45,6 @@ ynh_config_add --template="rspamd_classifier-bayes.conf" --destination="/etc/rsp
 ## Set web interface password
 HASH=$(rspamadm pw -p "$password")
 echo "password = \"$HASH\"" > /etc/rspamd/local.d/worker-controller.inc
-ynh_print_info "Please note the password for the web interface: $password"
 
 ## Set permissions
 chmod 644 /etc/rspamd/local.d/*

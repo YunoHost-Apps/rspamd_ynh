@@ -22,6 +22,17 @@ yunohost service add $app --description="Spam filtering system"
 # RESTORE VARIOUS FILES
 #=================================================
 
+tmp_dir=$(mktemp -d)
+
+if [[ $YNH_DEBIAN_VERSION == "bookworm" ]]; then
+    ynh_setup_source --dest_dir="$tmp_dir" --source_id="deb_bookworm"
+elif [[ $YNH_DEBIAN_VERSION == "trixie" ]]; then
+    ynh_setup_source --dest_dir="$tmp_dir" --source_id="deb_trixie"
+fi
+
+# Add the package to dependencies
+YNH_APT_INSTALL_DEPENDENCIES_REPLACE="false" ynh_apt_install_dependencies "rspamd"
+
 ynh_restore "/usr/share/yunohost/hooks/conf_regen/99-postfix_rspamd"
 yunohost tools regen-conf postfix
 
