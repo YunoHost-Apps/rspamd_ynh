@@ -38,16 +38,50 @@ ram.runtime = "50M"
     type = "path"
     default = "/rspamd"
 
+    [install.password]
+    type = "password"
+    help.en = "This corresponds to the password for Rspamd web interface access."
+
+    [install.per_user]
+    type = "boolean"
+    help.en = "Enable per user classifier."
+    default = 0
+    yes = true
+    no = false
+
+    [install.min_learns]
+    type = "number"
+    help.en = "Minimum learn to count for both spam and ham classes to perform classification."
+    default = 200
+    min = 10
+
     [install.init_main_permission]
     type = "group"
     default = "visitors"
 
 [resources]
     [resources.sources.main]
+    # Just used for autoupdate alert
     url = "https://github.com/rspamd/rspamd/archive/refs/tags/4.2.0.tar.gz"
     sha256 = "d1f5739410ee7c084a5d109d7d7f25b682f6ce43bbae25e089b66c029cd08434"
 
     autoupdate.strategy = "latest_github_release"
+
+    [resources.sources.deb_trixie]
+    amd64.url = "https://rspamd.com/apt-stable/pool/main/r/rspamd/rspamd_4.2.0-1~6268f47~trixie_amd64.deb"
+    amd64.sha256 = "6805a6066eaee0e120098ff7ea8cca62a696192506ee38d474d4441acff47df8"
+    arm64.url = "https://rspamd.com/apt-stable/pool/main/r/rspamd/rspamd_4.2.0-1~6268f47~trixie_arm64.deb"
+    arm64.sha256 = "8074c06b589d51ae759cf4b9b8a03bee42d780841e57db1396f30c664f7cc36e"
+    extract = false
+    rename = "rspamd.deb"
+
+    [resources.sources.deb_bookworm]
+    amd64.url = "https://rspamd.com/apt-stable/pool/main/r/rspamd/rspamd_4.2.0-1~6268f47~bookworm_amd64.deb"
+    amd64.sha256 = "329d9e113aa615c7dd5d1f0a947fe29b11ac530c0f11cdb0e44db9ddc7fe8198"
+    arm64.url = "https://rspamd.com/apt-stable/pool/main/r/rspamd/rspamd_4.2.0-1~6268f47~bookworm_arm64.deb"
+    arm64.sha256 = "7ac59e63f667367677b506164c65e9cc4bd5ece346c3f35b1c30fb565f047af1"
+    extract = false
+    rename = "rspamd.deb"
     
     [resources.permissions]
     main.url = "/"
@@ -67,10 +101,3 @@ ram.runtime = "50M"
         echo "libssl3, libarchive13, libicu72, libbinutils"
     fi
     """
-
-    [resources.apt.extras.rspamd]
-    repo = "deb http://rspamd.com/apt-stable/ __YNH_DEBIAN_VERSION__ main"
-    key = "https://rspamd.com/apt-stable/gpg.key"
-    packages = [
-        "rspamd"
-    ]

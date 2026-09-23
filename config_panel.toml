@@ -1,0 +1,25 @@
+version = "1.0"
+
+[main]
+name.en = "Rspamd configuration"
+services = ["__APP__"]
+
+    [main.customization]
+
+        [main.customization.password]
+        ask.en = "Set a password for the Rspamd web interface access"
+        type = "password"
+        help.en = "If a password already exist, leave blank and it will not be replaced."
+
+        [main.customization.per_user]
+        type = "boolean"
+        help.en = "Enable per user classifier."
+        default = 0
+        yes = true
+        no = false
+
+        [main.customization.min_learns]
+        type = "number"
+        help.en = "Minimum learn to count for both spam and ham classes to perform classification."
+        default = 200
+        min = 10

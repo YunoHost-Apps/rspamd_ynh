@@ -4,5 +4,5 @@ if environment :matches "imap.user" "*" {
   set "username" "${1}";
 }
 
-# username is passed but currently not used by the shell script
+# username is passed and only used if per_user setting is set to true
 pipe :copy "rspamd-learn-spam.sh" [ "${username}" ];
