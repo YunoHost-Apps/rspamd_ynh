@@ -1,6 +1,81 @@
 #!/bin/bash
 
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
+
 source /usr/share/yunohost/helpers
+
+#=================================================
+# DOWNLOAD, CHECK AND UNPACK SOURCE
+#=================================================
+ynh_script_progression "Setting up source files..."
+
+tmp_dir=$(mktemp -d)
+
+if [[ $YNH_DEBIAN_VERSION == "bookworm" ]]; then
+    ynh_setup_source --dest_dir="$tmp_dir" --source_id="deb_bookworm"
+elif [[ $YNH_DEBIAN_VERSION == "trixie" ]]; then
+    ynh_setup_source --dest_dir="$tmp_dir" --source_id="deb_trixie"
+fi
+
+# Install the packages
+_ynh_apt_install --allow-downgrades "$tmp_dir/rspamd.deb"
+
+# Add the package to dependencies
+YNH_APT_INSTALL_DEPENDENCIES_REPLACE="false" ynh_apt_install_dependencies "rspamd"
+
+#=================================================
+# APP INITIAL CONFIGURATION
+#=================================================
+ynh_script_progression "Adding $app's configuration files..."
+
+# Add postfix configuration hook and regen postfix conf
+ynh_config_add --template="yunohost_postfix_regenconf_hook" --destination="/usr/share/yunohost/hooks/conf_regen/99-postfix_rspamd"
+yunohost tools regen-conf postfix
+
+# Add rspamd conf
+## Add redis conf
+ynh_config_add --template="rspamd_redis.conf" --destination="/etc/rspamd/local.d/redis.conf"
+
+## Add per-user conf
+ynh_config_add --template="rspamd_classifier-bayes.conf" --destination="/etc/rspamd/local.d/classifier-bayes.conf"
+
+## Set web interface password
+HASH=$(rspamadm pw -p "$password")
+echo "password = \"$HASH\"" > /etc/rspamd/local.d/worker-controller.inc
+ynh_print_info --message="Please note the password for the web interface: $password"
+
+## Set permissions
+chmod 644 /etc/rspamd/local.d/*
+
+# Add dovecot conf
+## Create sieve directories
+mkdir -p /etc/dovecot/global_script
+mkdir -p /usr/lib/dovecot/sieve-pipe
+
+## Add the config file for spam handling
+if [[ $YNH_DEBIAN_VERSION == "bookworm" ]]; then
+    ynh_config_add --template="dovecot_rspamd-learning_bookworm.conf" --destination="/etc/dovecot/yunohost.d/post-ext.d/rspamd-learning.conf"
+elif [[ $YNH_DEBIAN_VERSION == "trixie" ]]; then
+    ynh_config_add --template="dovecot_rspamd-learning_trixie.conf" --destination="/etc/dovecot/yunohost.d/post-ext.d/rspamd-learning.conf"
+fi
+
+## Add the sieve script to move Spam mails to the user's Junk folder
+ynh_config_add --template="dovecot_rspamd-spam-to-junk-folder.sieve" --destination="/etc/dovecot/global_script/rspamd-spam-to-junk-folder.sieve"
+
+## Deploy imap_sieve scripts for spam/ham learning
+### Spam learning
+ynh_config_add --template="dovecot_rspamd-report-spam.sieve" --destination="/etc/dovecot/global_script/rspamd-report-spam.sieve"
+ynh_config_add --template="dovecot_rspamd-learn-spam.sh" --destination="/usr/lib/dovecot/sieve-pipe/rspamd-learn-spam.sh"
+
+### Ham learning
+ynh_config_add --template="dovecot_rspamd-report-ham.sieve" --destination="/etc/dovecot/global_script/rspamd-report-ham.sieve"
+ynh_config_add --template="dovecot_rspamd-learn-ham.sh" --destination="/usr/lib/dovecot/sieve-pipe/rspamd-learn-ham.sh"
+
+## Set permissions
+chmod 750 /etc/dovecot/global_script/*.sieve
+chmod 755 /usr/lib/dovecot/sieve-pipe/rspamd-learn-*.sh
 
 #=================================================
 # SYSTEM CONFIGURATION
@@ -9,57 +84,20 @@ ynh_script_progression "Adding system configurations related to $app..."
 
 ynh_config_add_nginx
 
-# Add redis
-ynh_config_add --template="redis.conf" --destination="/etc/rspamd/local.d/redis.conf"
-ynh_systemctl --service=rspamd --action="restart"
-
-# Add postfix configuration hook and regen postfix conf
-ynh_config_add --template="postfix_regenconf_hook" --destination="/usr/share/yunohost/hooks/conf_regen/99-postfix_rspamd"
-yunohost tools regen-conf postfix
-ynh_systemctl --service=postfix --action="restart"
-
-# Add dovecot conf
-## Create sieve directory
-mkdir -p "/etc/dovecot/sieve"
-
-## Add the config file for spam handling
-if [[ $YNH_DEBIAN_VERSION == "bookworm" ]]; then
-    ynh_config_add --template="dovecot_imap_sieve_bookworm.conf" --destination="/etc/dovecot/yunohost.d/post-ext.d/antispam.conf"
-elif [[ $YNH_DEBIAN_VERSION == "trixie" ]]; then
-    ynh_config_add --template="dovecot_imap_sieve_trixie.conf" --destination="/etc/dovecot/yunohost.d/post-ext.d/antispam.conf"
-fi
-
-## Restart dovecot to load the new conf
-ynh_systemctl --service=dovecot --action="restart"
-
-## Add the sieve script to move Spam mails to the user's Junk folder
-ynh_config_add --template="rspamd.sieve" --destination="/etc/dovecot/sieve/rspamd.sieve"
-
-## Deploy imap_sieve scripts for spam/ham learning
-### Spam learning
-ynh_config_add --template="report-spam.sieve" --destination="/etc/dovecot/sieve/report-spam.sieve"
-ynh_config_add --template="rspamd-learn-spam.sh" --destination="/etc/dovecot/sieve/rspamd-learn-spam.sh"
-
-### Ham learning
-ynh_config_add --template="report-ham.sieve" --destination="/etc/dovecot/sieve/report-ham.sieve"
-ynh_config_add --template="rspamd-learn-ham.sh" --destination="/etc/dovecot/sieve/rspamd-learn-ham.sh"
-
-## Compile sieve scripts
-sievec "/etc/dovecot/sieve/rspamd.sieve"
-sievec "/etc/dovecot/sieve/report-spam.sieve"
-sievec "/etc/dovecot/sieve/report-ham.sieve"
-
-## Set permissions
-chown -R vmail:mail "/etc/dovecot/sieve"
-chmod -R u=rw,go= "/etc/dovecot/sieve"
-chmod u+x "/etc/dovecot/sieve/rspamd-learn-spam.sh"
-chmod u+x "/etc/dovecot/sieve/rspamd-learn-ham.sh"
-
-## Restart dovecot to load the new sieve scripts
-ynh_systemctl --service=dovecot --action="restart"
-
-# Integrate rspamd in YunoHost service list
 yunohost service add "$app" --description="Spam filtering system"
+
+ynh_config_add_logrotate
+
+#=================================================
+# START SYSTEMD SERVICE
+#=================================================
+ynh_script_progression "Starting $app's systemd service..."
+
+ynh_systemctl --service=postfix --action=restart
+
+ynh_systemctl --service=rspamd --action=restart
+
+ynh_systemctl --service=dovecot --action=restart
 
 #=================================================
 # END OF SCRIPT
