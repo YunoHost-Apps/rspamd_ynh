@@ -106,8 +106,3 @@ ynh_systemctl --service=dovecot --action=restart
 #=================================================
 
 ynh_script_progression "Installation of $app completed"
-
-#FIXME
-apt depends rspamd-ynh-deps
-apt-cache rdepends --installed rspamd
-

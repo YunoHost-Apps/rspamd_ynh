@@ -52,5 +52,6 @@ ynh_script_progression "Removal of $app completed"
 apt-cache policy rspamd
 systemctl status rspamd.service
 ss -tlnp | grep 11332
-
+apt depends rspamd-ynh-deps
+apt-cache rdepends --installed rspamd
 
