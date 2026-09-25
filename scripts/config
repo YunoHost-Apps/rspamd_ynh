@@ -25,18 +25,24 @@ get__min_learns() {
 #=================================================
 
 set__per_user() {
-    ynh_print_info --message="Saving the new per user classifier setting to $per_user in the Rspamd configuration..."
+    ynh_print_info "Saving the new per user classifier setting to $per_user in the Rspamd configuration..."
     ynh_app_setting_set --key=per_user --value=$per_user
     case "$per_user" in
         0) per_user_value="false" ;;
         1) per_user_value="true" ;;
     esac
+    min_learns=$(ynh_app_setting_get --key=min_learns)
     ynh_config_add --template="rspamd_classifier-bayes.conf" --destination="/etc/rspamd/local.d/classifier-bayes.conf"
 }
 
 set__min_learns() {
-    ynh_print_info --message="Saving the new minimum learn to count to perform classification to $min_learns in the Rspamd configuration..."
+    ynh_print_info "Saving the new minimum learn to count to perform classification to $min_learns in the Rspamd configuration..."
     ynh_app_setting_set --key=min_learns --value=$min_learns
+    per_user=$(ynh_app_setting_get --key=per_user)
+    case "$per_user" in
+        0) per_user_value="false" ;;
+        1) per_user_value="true" ;;
+    esac
     ynh_config_add --template="rspamd_classifier-bayes.conf" --destination="/etc/rspamd/local.d/classifier-bayes.conf"
 }
 
