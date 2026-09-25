@@ -22,9 +22,10 @@ if ynh_app_upgrading_from_version_before 4.2.0~ynh1
 then
     ynh_safe_rm "/etc/dovecot/global_script/rspamd.sieve"
     ynh_safe_rm "/etc/dovecot/yunohost.d/post-ext.d/antispam.conf"
-    ynh_app_setting_set --key=per_user --value=0
-    ynh_app_setting_set --key=min_learns --value=200
-    _ynh_apt remove "$app"
+    per_user=0
+    ynh_app_setting_set --key=per_user --value=$per_user
+    min_learns=200
+    ynh_app_setting_set --key=min_learns --value=$min_learns
 fi
 
 #=================================================
