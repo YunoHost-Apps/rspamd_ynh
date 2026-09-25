@@ -19,8 +19,14 @@ elif [[ $YNH_DEBIAN_VERSION == "trixie" ]]; then
     ynh_setup_source --dest_dir="$tmp_dir" --source_id="deb_trixie"
 fi
 
+# Install the package
+_ynh_apt_install --allow-downgrades "$tmp_dir/rspamd.deb"
+
 # Add the package to dependencies
 YNH_APT_INSTALL_DEPENDENCIES_REPLACE="false" ynh_apt_install_dependencies "rspamd"
+
+# Mark the packahe as auto
+apt-mark auto "rspamd"
 
 #=================================================
 # APP INITIAL CONFIGURATION
