@@ -11,8 +11,6 @@ test_format = 1.0
     # Commits to test upgrade from
     # -------------------------------
 
-    # Upgrade from 3.14.2~ynh1 is not possible on Trixie because the old
-    # Bookworm .deb has incompatible dependencies (libbinutils << 2.40.1,
-    # libicu72) that cannot be satisfied on Trixie.
+    # Upgrade from 3.14.2~ynh1 & 4.1.5~ynh1 is not possible on Trixie
     #test_upgrade_from.3224460b56498f0dc573c2e873aef595c911f880.name = "Upgrade from 3.14.2~ynh1"
-    test_upgrade_from.322275b213f64de11716e6ec39e2571c2ec24071.name = "Upgrade from 4.1.5~ynh1"
+    #test_upgrade_from.322275b213f64de11716e6ec39e2571c2ec24071.name = "Upgrade from 4.1.5~ynh1"
