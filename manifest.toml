@@ -68,9 +68,6 @@ ram.runtime = "50M"
     arm64.sha256 = "7ac59e63f667367677b506164c65e9cc4bd5ece346c3f35b1c30fb565f047af1"
     extract = false
     rename = "rspamd.deb"
-    
-    [resources.permissions]
-    main.url = "/"
 
     [resources.ports]
     main.default = 11332
