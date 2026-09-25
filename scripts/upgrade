@@ -1,6 +1,32 @@
 #!/bin/bash
 
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
+
 source /usr/share/yunohost/helpers
+
+#=================================================
+# STOP SYSTEMD SERVICE
+#=================================================
+ynh_script_progression "Stopping $app's systemd service..."
+
+ynh_systemctl --service="$app" --action="stop"
+
+#=================================================
+# ENSURE DOWNWARD COMPATIBILITY
+#=================================================
+ynh_script_progression "Ensuring downward compatibility..."
+
+if ynh_app_upgrading_from_version_before 4.2.0~ynh1
+then
+    ynh_safe_rm "/etc/dovecot/global_script/rspamd.sieve"
+    ynh_safe_rm "/etc/dovecot/yunohost.d/post-ext.d/antispam.conf"
+    per_user=0
+    ynh_app_setting_set --key=per_user --value=$per_user
+    min_learns=200
+    ynh_app_setting_set --key=min_learns --value=$min_learns
+fi
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
@@ -10,40 +36,83 @@ ynh_script_progression "Setting up $app..."
 tmp_dir=$(mktemp -d)
 
 if [[ $YNH_DEBIAN_VERSION == "bookworm" ]]; then
-    ynh_setup_source --dest_dir="$tmp_dir" --source_id="bookworm"
-	dpkg -i $tmp_dir/rspamd.deb
+    ynh_setup_source --dest_dir="$tmp_dir" --source_id="deb_bookworm"
 elif [[ $YNH_DEBIAN_VERSION == "trixie" ]]; then
-    ynh_setup_source --dest_dir="$tmp_dir" --source_id="trixie"
-	dpkg -i $tmp_dir/rspamd.deb
+    ynh_setup_source --dest_dir="$tmp_dir" --source_id="deb_trixie"
 fi
 
-#=================================================
-# SYSTEM CONFIGURATION
-#=================================================
-ynh_script_progression "Adding system configurations related to $app..."
+# Add the package to dependencies
+YNH_APT_INSTALL_DEPENDENCIES_REPLACE="false" ynh_apt_install_dependencies "rspamd"
 
-cp ../conf/redis.conf /etc/rspamd/local.d/redis.conf
-ynh_systemctl --service=rspamd --action="restart"
+#=================================================
+# UPDATE A CONFIG FILE
+#=================================================
+ynh_script_progression "Updating $app's configuration files..."
 
 # Add postfix configuration hook and regen postfix conf
-cp ../conf/postfix_regenconf_hook /usr/share/yunohost/hooks/conf_regen/99-postfix_rspamd
+ynh_config_add --template="yunohost_postfix_regenconf_hook" --destination="/usr/share/yunohost/hooks/conf_regen/99-postfix_rspamd"
 yunohost tools regen-conf postfix
-ynh_systemctl --service=postfix --action="restart"
+
+# Add rspamd conf
+## Add redis conf
+ynh_config_add --template="rspamd_redis.conf" --destination="/etc/rspamd/local.d/redis.conf"
+
+## Add per_user conf
+per_user=$(ynh_app_setting_get --key=per_user)
+case "$per_user" in
+    0) per_user_value="false" ;;
+    1) per_user_value="true" ;;
+esac
+ynh_config_add --template="rspamd_classifier-bayes.conf" --destination="/etc/rspamd/local.d/classifier-bayes.conf"
+
+## Set permissions
+chmod 644 /etc/rspamd/local.d/*
 
 # Add dovecot conf
-cp ../conf/dovecot_sieve.conf /etc/dovecot/global_script/rspamd.sieve
-sievec /etc/dovecot/global_script/rspamd.sieve
-chown -R vmail:mail /etc/dovecot/global_script
+## Create sieve directories
+mkdir -p /etc/dovecot/global_script
+mkdir -p /usr/lib/dovecot/sieve-pipe
 
-cp ../conf/dovecot_antispam.conf /etc/dovecot/yunohost.d/post-ext.d/antispam.conf
-ynh_systemctl --service=dovecot --action="restart"
+## Add the config file for spam handling
+if [[ $YNH_DEBIAN_VERSION == "bookworm" ]]; then
+    ynh_config_add --template="dovecot_rspamd-learning_bookworm.conf" --destination="/etc/dovecot/yunohost.d/post-ext.d/rspamd-learning.conf"
+elif [[ $YNH_DEBIAN_VERSION == "trixie" ]]; then
+    ynh_config_add --template="dovecot_rspamd-learning_trixie.conf" --destination="/etc/dovecot/yunohost.d/post-ext.d/rspamd-learning.conf"
+fi
 
-# Use logrotate to manage application logfile(s)
-# disable it for now because it creates an issue were it want to chown rspamd: but rspamd user doesn’t exist
-#ynh_config_add_logrotate
+## Add the sieve script to move Spam mails to the user's Junk folder
+ynh_config_add --template="dovecot_rspamd-spam-to-junk-folder.sieve" --destination="/etc/dovecot/global_script/rspamd-spam-to-junk-folder.sieve"
 
-# Integrate rspamd in YunoHost service list
-yunohost service add $app --description="Spam filtering system"
+## Deploy imap_sieve scripts for spam/ham learning
+### Spam learning
+ynh_config_add --template="dovecot_rspamd-report-spam.sieve" --destination="/etc/dovecot/global_script/rspamd-report-spam.sieve"
+ynh_config_add --template="dovecot_rspamd-learn-spam.sh" --destination="/usr/lib/dovecot/sieve-pipe/rspamd-learn-spam.sh"
+
+### Ham learning
+ynh_config_add --template="dovecot_rspamd-report-ham.sieve" --destination="/etc/dovecot/global_script/rspamd-report-ham.sieve"
+ynh_config_add --template="dovecot_rspamd-learn-ham.sh" --destination="/usr/lib/dovecot/sieve-pipe/rspamd-learn-ham.sh"
+
+## Set permissions
+chmod 750 /etc/dovecot/global_script/*.sieve
+chmod 755 /usr/lib/dovecot/sieve-pipe/rspamd-learn-*.sh
+
+#=================================================
+# REAPPLY SYSTEM CONFIGURATION
+#=================================================
+ynh_script_progression "Upgrading system configurations related to $app..."
+
+yunohost service add "$app" --description="Spam filtering system"
+
+#=================================================
+# START SYSTEMD SERVICE
+#=================================================
+ynh_script_progression "Starting systemd services..."
+
+ynh_systemctl --service=postfix --action=restart
+
+ynh_systemctl --service=rspamd --action=restart
+
+ynh_systemctl --service=dovecot --action=restart
 
 #=================================================
 # END OF SCRIPT

@@ -1,23 +1,26 @@
 #!/bin/bash
 
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
+
 source /usr/share/yunohost/helpers
 
 #=================================================
-# BACKUP SYSTEM CONFIGURATION
+# BACKUP VARIOUS FILES
 #=================================================
 
 ynh_backup "/usr/share/yunohost/hooks/conf_regen/99-postfix_rspamd"
-ynh_backup "/etc/dovecot/global_script/rspamd.sieve"
-ynh_backup "/etc/dovecot/yunohost.d/post-ext.d/antispam.conf"
 
-ynh_backup "/etc/rspamd"
+ynh_backup "/etc/rspamd/local.d/redis.conf"
+ynh_backup "/etc/rspamd/local.d/classifier-bayes.conf"
 
-# logrotate is currently not configured by install/upgrade (ynh_config_add_logrotate
-# is commented out), so this file may not exist. Only back it up if present, otherwise
-# ynh_backup aborts and breaks the pre-upgrade safety backup.
-if [ -e "/etc/logrotate.d/$app" ]; then
-    ynh_backup "/etc/logrotate.d/$app"
-fi
+ynh_backup "/etc/dovecot/yunohost.d/post-ext.d/rspamd-learning.conf"
+ynh_backup "/etc/dovecot/global_script/rspamd-spam-to-junk-folder.sieve"
+ynh_backup "/etc/dovecot/global_script/rspamd-report-spam.sieve"
+ynh_backup "/usr/lib/dovecot/sieve-pipe/rspamd-learn-spam.sh"
+ynh_backup "/etc/dovecot/global_script/rspamd-report-ham.sieve"
+ynh_backup "/usr/lib/dovecot/sieve-pipe/rspamd-learn-ham.sh"
 
 #=================================================
 # END OF SCRIPT

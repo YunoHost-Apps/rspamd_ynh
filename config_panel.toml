@@ -1,0 +1,21 @@
+version = "1.0"
+
+[main]
+name.en = "Rspamd configuration"
+services = ["__APP__"]
+
+    [main.customization]
+
+        [main.customization.per_user]
+        type = "boolean"
+        ask.en = "Enable per user classifier."
+        ask.fr = "Activer la classification par utilisateur."
+        default = 0
+
+        [main.customization.min_learns]
+        type = "number"
+        ask.en = "Minimum learn to count for both spam and ham classes to perform classification."
+        ask.fr = "Quantité minimale de messages spam et/ou ham pour définir la calssification."
+        default = 200
+        min = 1
+        max = 9999
