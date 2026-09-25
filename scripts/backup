@@ -7,16 +7,6 @@
 source /usr/share/yunohost/helpers
 
 #=================================================
-# BACKUP SYSTEM CONFIGURATION
-#=================================================
-
-domain=$(ynh_app_setting_get --key=domain)
-if [[ "$domain" != "" ]]
-then
-    ynh_backup "/etc/nginx/conf.d/$domain.d/$app.conf"
-fi
-
-#=================================================
 # BACKUP VARIOUS FILES
 #=================================================
 
@@ -24,7 +14,6 @@ ynh_backup "/usr/share/yunohost/hooks/conf_regen/99-postfix_rspamd"
 
 ynh_backup "/etc/rspamd/local.d/redis.conf"
 ynh_backup "/etc/rspamd/local.d/classifier-bayes.conf"
-ynh_backup "/etc/rspamd/local.d/worker-controller.inc"
 
 ynh_backup "/etc/dovecot/yunohost.d/post-ext.d/rspamd-learning.conf"
 ynh_backup "/etc/dovecot/global_script/rspamd-spam-to-junk-folder.sieve"

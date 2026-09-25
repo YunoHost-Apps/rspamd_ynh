@@ -11,11 +11,6 @@ source /usr/share/yunohost/helpers
 #=================================================
 ynh_script_progression "Restoring system configurations related to $app..."
 
-if [ -e "$YNH_CWD/etc/nginx/conf.d/$domain.d/$app.conf" ]
-then
-    ynh_restore "/etc/nginx/conf.d/$domain.d/$app.conf"
-fi
-
 yunohost service add $app --description="Spam filtering system"
 
 #=================================================
@@ -38,7 +33,6 @@ yunohost tools regen-conf postfix
 
 ynh_restore "/etc/rspamd/local.d/redis.conf"
 ynh_restore "/etc/rspamd/local.d/classifier-bayes.conf"
-ynh_restore "/etc/rspamd/local.d/worker-controller.inc"
 chmod 644 /etc/rspamd/local.d/*
 
 ynh_restore "/etc/dovecot/yunohost.d/post-ext.d/rspamd-learning.conf"
@@ -53,15 +47,13 @@ chmod 755 /usr/lib/dovecot/sieve-pipe/rspamd-learn-*.sh
 #=================================================
 # RELOAD NGINX AND PHP-FPM OR THE APP SERVICE
 #=================================================
-ynh_script_progression "Reloading NGINX web server and $app's service..."
+ynh_script_progression "Starting systemd services..."
 
 ynh_systemctl --service=postfix --action=restart
 
 ynh_systemctl --service=rspamd --action=restart
 
 ynh_systemctl --service=dovecot --action=restart
-
-ynh_systemctl --service=nginx --action=reload
 
 #=================================================
 # END OF SCRIPT

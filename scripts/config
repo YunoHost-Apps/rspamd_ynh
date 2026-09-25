@@ -12,10 +12,6 @@ ynh_abort_if_errors
 # SPECIFIC GETTERS FOR TOML SHORT KEY
 #=================================================
 
-get__password() {
-    echo ""
-}
-
 get__per_user() {
     ynh_app_setting_get --app=$app --key=per_user
 }
@@ -27,15 +23,6 @@ get__min_learns() {
 #=================================================
 # SPECIFIC SETTERS FOR TOML SHORT KEYS
 #=================================================
-
-set__password() {
-    if [ ! "$password" == "" ]
-    then
-        ynh_print_info --message="Saving the new password $password in the Rspamd configuration..."
-        HASH=$(rspamadm pw -p "$password")
-        echo "password = \"$HASH\"" > /etc/rspamd/local.d/worker-controller.inc
-    fi
-}
 
 set__per_user() {
     ynh_print_info --message="Saving the new per user classifier setting to $per_user in the Rspamd configuration..."

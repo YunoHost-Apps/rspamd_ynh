@@ -42,10 +42,6 @@ case "$per_user" in
 esac
 ynh_config_add --template="rspamd_classifier-bayes.conf" --destination="/etc/rspamd/local.d/classifier-bayes.conf"
 
-## Set web interface password
-HASH=$(rspamadm pw -p "$password")
-echo "password = \"$HASH\"" > /etc/rspamd/local.d/worker-controller.inc
-
 ## Set permissions
 chmod 644 /etc/rspamd/local.d/*
 
@@ -81,8 +77,6 @@ chmod 755 /usr/lib/dovecot/sieve-pipe/rspamd-learn-*.sh
 # SYSTEM CONFIGURATION
 #=================================================
 ynh_script_progression "Adding system configurations related to $app..."
-
-ynh_config_add_nginx
 
 yunohost service add "$app" --description="Spam filtering system"
 

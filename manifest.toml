@@ -31,32 +31,19 @@ ram.build = "50M"
 ram.runtime = "50M"
 
 [install]
-    [install.domain]
-    type = "domain"
-
-    [install.path]
-    type = "path"
-    default = "/rspamd"
-
-    [install.password]
-    type = "password"
-    help.en = "This corresponds to the password for Rspamd web interface access."
-
     [install.per_user]
     ask.en = "Enable per user classifier."
+    ask.fr = "Activer la classification par utilisateur."
     type = "boolean"
     default = false
 
     [install.min_learns]
     ask.en = "Minimum learn to count for both spam and ham classes to perform classification."
+    ask.fr = "Quantité minimale de messages spam et/ou ham pour définir la calssification."
     type = "number"
     default = 200
     min = 1
     max = 9999
-
-    [install.init_main_permission]
-    type = "group"
-    default = "visitors"
 
 [resources]
     [resources.sources.main]
@@ -88,8 +75,6 @@ ram.runtime = "50M"
     [resources.ports]
     main.default = 11332
     main.fixed = true
-    web.default = 11334
-    web.fixed = true
 
     [resources.apt]
     packages = "redis-server, libhyperscan5, postfix, libsodium23, libsqlite3-0"

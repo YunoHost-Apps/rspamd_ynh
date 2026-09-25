@@ -15,8 +15,6 @@ if ynh_hide_warnings yunohost service status $app >/dev/null; then
     yunohost service remove $app
 fi
 
-ynh_config_remove_nginx
-
 # Remove postfix conf tweak
 ynh_safe_rm "/usr/share/yunohost/hooks/conf_regen/99-postfix_rspamd"
 yunohost tools regen-conf postfix
@@ -24,10 +22,6 @@ yunohost tools regen-conf postfix
 # Remove rspamd conf
 ynh_safe_rm "/etc/rspamd/local.d/redis.conf"
 ynh_safe_rm "/etc/rspamd/local.d/classifier-bayes.conf"
-if [ -e "/etc/rspamd/local.d/worker-controller.inc" ]
-then
-    ynh_safe_rm "/etc/rspamd/local.d/worker-controller.inc"
-fi
 
 # Remove dovecot conf
 ynh_safe_rm "/etc/dovecot/yunohost.d/post-ext.d/rspamd-learning.conf"

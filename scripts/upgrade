@@ -24,8 +24,6 @@ then
     ynh_safe_rm "/etc/dovecot/yunohost.d/post-ext.d/antispam.conf"
     ynh_app_setting_set --key=per_user --value=0
     ynh_app_setting_set --key=min_learns --value=200
-    ynh_app_setting_set --key=domain --value=""
-    ynh_app_setting_set --key=path --value="/rspamd"
 fi
 
 #=================================================
@@ -101,18 +99,12 @@ chmod 755 /usr/lib/dovecot/sieve-pipe/rspamd-learn-*.sh
 #=================================================
 ynh_script_progression "Upgrading system configurations related to $app..."
 
-domain=$(ynh_app_setting_get --key=domain)
-if [[ "$domain" != "" ]]
-then
-    ynh_config_add_nginx
-fi
-
 yunohost service add "$app" --description="Spam filtering system"
 
 #=================================================
 # START SYSTEMD SERVICE
 #=================================================
-ynh_script_progression "Starting $app's systemd service..."
+ynh_script_progression "Starting systemd services..."
 
 ynh_systemctl --service=postfix --action=restart
 
