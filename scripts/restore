@@ -1,5 +1,9 @@
 #!/bin/bash
 
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
+
 source /usr/share/yunohost/helpers
 
 #=================================================
@@ -7,26 +11,57 @@ source /usr/share/yunohost/helpers
 #=================================================
 ynh_script_progression "Restoring system configurations related to $app..."
 
-ynh_restore "/usr/share/yunohost/hooks/conf_regen/99-postfix_rspamd"
-yunohost tools regen-conf postfix
-ynh_systemctl --service=postfix --action="restart"
+yunohost service add $app --description="Spam filtering system"
 
-ynh_restore "/etc/dovecot/global_script/rspamd.sieve"
-ynh_restore "/etc/dovecot/yunohost.d/post-ext.d/antispam.conf"
-sievec /etc/dovecot/global_script/rspamd.sieve
-chown -R vmail:mail /etc/dovecot/global_script
-ynh_systemctl --service=dovecot --action="restart"
+#=================================================
+# RESTORE VARIOUS FILES
+#=================================================
 
-ynh_restore "/etc/rspamd"
+tmp_dir=$(mktemp -d)
 
-# Only restore the logrotate config if it is present in the backup archive
-# (see scripts/backup — it may be absent because logrotate is not configured).
-if [ -e "$YNH_CWD/etc/logrotate.d/$app" ]; then
-    ynh_restore "/etc/logrotate.d/$app"
+if [[ $YNH_DEBIAN_VERSION == "bookworm" ]]; then
+    ynh_setup_source --dest_dir="$tmp_dir" --source_id="deb_bookworm"
+elif [[ $YNH_DEBIAN_VERSION == "trixie" ]]; then
+    ynh_setup_source --dest_dir="$tmp_dir" --source_id="deb_trixie"
 fi
 
-# Integrate rspamd in YunoHost service list
-yunohost service add $app --description="Spam filtering system"
+# Install the package
+_ynh_apt_install --allow-downgrades "$tmp_dir/rspamd.deb"
+
+# Add the package to dependencies
+YNH_APT_INSTALL_DEPENDENCIES_REPLACE="false" ynh_apt_install_dependencies "rspamd"
+
+# Mark the packahe as auto
+apt-mark auto "rspamd"
+
+ynh_restore "/usr/share/yunohost/hooks/conf_regen/99-postfix_rspamd"
+yunohost tools regen-conf postfix
+
+ynh_restore "/etc/rspamd/local.d/redis.conf"
+ynh_restore "/etc/rspamd/local.d/classifier-bayes.conf"
+ynh_restore "/etc/rspamd/local.d/dkim_signing.conf"
+
+chmod 644 /etc/rspamd/local.d/*
+
+ynh_restore "/etc/dovecot/yunohost.d/post-ext.d/rspamd-learning.conf"
+ynh_restore "/etc/dovecot/global_script/rspamd-spam-to-junk-folder.sieve"
+ynh_restore "/etc/dovecot/global_script/rspamd-report-spam.sieve"
+ynh_restore "/usr/lib/dovecot/sieve-pipe/rspamd-learn-spam.sh"
+ynh_restore "/etc/dovecot/global_script/rspamd-report-ham.sieve"
+ynh_restore "/usr/lib/dovecot/sieve-pipe/rspamd-learn-ham.sh"
+chmod 750 /etc/dovecot/global_script/*.sieve
+chmod 755 /usr/lib/dovecot/sieve-pipe/rspamd-learn-*.sh
+
+#=================================================
+# RELOAD NGINX AND PHP-FPM OR THE APP SERVICE
+#=================================================
+ynh_script_progression "Starting systemd services..."
+
+ynh_systemctl --service=postfix --action=restart
+
+ynh_systemctl --service=rspamd --action=restart
+
+ynh_systemctl --service=dovecot --action=restart
 
 #=================================================
 # END OF SCRIPT
