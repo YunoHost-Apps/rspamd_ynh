@@ -91,18 +91,22 @@ fi
 
 ## Add the sieve script to move Spam mails to the user's Junk folder
 ynh_config_add --template="dovecot_rspamd-spam-to-junk-folder.sieve" --destination="/etc/dovecot/global_script/rspamd-spam-to-junk-folder.sieve"
+sievec /etc/dovecot/global_script/rspamd-spam-to-junk-folder.sieve
 
 ## Deploy imap_sieve scripts for spam/ham learning
 ### Spam learning
 ynh_config_add --template="dovecot_rspamd-report-spam.sieve" --destination="/etc/dovecot/global_script/rspamd-report-spam.sieve"
 ynh_config_add --template="dovecot_rspamd-learn-spam.sh" --destination="/usr/lib/dovecot/sieve-pipe/rspamd-learn-spam.sh"
+sievec /etc/dovecot/global_script/rspamd-report-spam.sieve
 
 ### Ham learning
 ynh_config_add --template="dovecot_rspamd-report-ham.sieve" --destination="/etc/dovecot/global_script/rspamd-report-ham.sieve"
 ynh_config_add --template="dovecot_rspamd-learn-ham.sh" --destination="/usr/lib/dovecot/sieve-pipe/rspamd-learn-ham.sh"
+sievec /etc/dovecot/global_script/rspamd-report-ham.sieve
 
 ## Set permissions
-chmod 750 /etc/dovecot/global_script/*.sieve
+chown -R vmail:mail /etc/dovecot/global_script/
+chmod 750 /etc/dovecot/global_script/
 chmod 755 /usr/lib/dovecot/sieve-pipe/rspamd-learn-*.sh
 
 #=================================================
