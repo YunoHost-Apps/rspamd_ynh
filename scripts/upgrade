@@ -88,6 +88,7 @@ if [[ $YNH_DEBIAN_VERSION == "bookworm" ]]; then
 elif [[ $YNH_DEBIAN_VERSION == "trixie" ]]; then
     ynh_config_add --template="dovecot_rspamd-learning_trixie.conf" --destination="/etc/dovecot/yunohost.d/post-ext.d/rspamd-learning.conf"
 fi
+ynh_systemctl --service=dovecot --action=restart
 
 ## Add the sieve script to move Spam mails to the user's Junk folder
 ynh_config_add --template="dovecot_rspamd-spam-to-junk-folder.sieve" --destination="/etc/dovecot/global_script/rspamd-spam-to-junk-folder.sieve"
