@@ -53,8 +53,8 @@ ynh_restore "/etc/dovecot/global_script/rspamd-report-ham.sieve"
 ynh_restore "/etc/dovecot/global_script/rspamd-report-ham.svbin"
 ynh_restore "/usr/lib/dovecot/sieve-pipe/rspamd-learn-ham.sh"
 chown -R vmail:mail /etc/dovecot/global_script/
-chmod 750 /etc/dovecot/global_script/
-chmod 755 /usr/lib/dovecot/sieve-pipe/rspamd-learn-*.sh
+chmod -R 750 /etc/dovecot/global_script/
+chmod -R 755 /usr/lib/dovecot/sieve-pipe/
 
 #=================================================
 # RELOAD NGINX AND PHP-FPM OR THE APP SERVICE

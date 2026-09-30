@@ -83,8 +83,8 @@ sievec /etc/dovecot/global_script/rspamd-report-ham.sieve
 
 ## Set permissions
 chown -R vmail:mail /etc/dovecot/global_script/
-chmod 750 /etc/dovecot/global_script/
-chmod 755 /usr/lib/dovecot/sieve-pipe/rspamd-learn-*.sh
+chmod -R 750 /etc/dovecot/global_script/
+chmod -R 755 /usr/lib/dovecot/sieve-pipe/
 
 #=================================================
 # SYSTEM CONFIGURATION
