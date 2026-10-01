@@ -28,6 +28,14 @@ then
     ynh_app_setting_set --key=min_learns --value=$min_learns
 fi
 
+if ynh_app_upgrading_from_version_before 4.2.0~ynh4
+then
+    ynh_safe_rm "/etc/dovecot/global_script/rspamd-report-spam.sieve"
+    ynh_safe_rm "/etc/dovecot/global_script/rspamd-report-spam.svbin"
+    ynh_safe_rm "/etc/dovecot/global_script/rspamd-report-ham.sieve"
+    ynh_safe_rm "/etc/dovecot/global_script/rspamd-report-ham.svbin"
+fi
+
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
@@ -80,6 +88,7 @@ chmod 644 /etc/rspamd/local.d/*
 # Add dovecot conf
 ## Create sieve directories
 mkdir -p /etc/dovecot/global_script
+mkdir -p /etc/dovecot/imapsieve
 mkdir -p /usr/lib/dovecot/sieve-pipe
 
 ## Add the config file for spam handling
@@ -96,19 +105,21 @@ sievec /etc/dovecot/global_script/rspamd-spam-to-junk-folder.sieve
 
 ## Deploy imap_sieve scripts for spam/ham learning
 ### Spam learning
-ynh_config_add --template="dovecot_rspamd-report-spam.sieve" --destination="/etc/dovecot/global_script/rspamd-report-spam.sieve"
+ynh_config_add --template="dovecot_rspamd-report-spam.sieve" --destination="/etc/dovecot/imapsieve/rspamd-report-spam.sieve"
 ynh_config_add --template="dovecot_rspamd-learn-spam.sh" --destination="/usr/lib/dovecot/sieve-pipe/rspamd-learn-spam.sh"
-sievec /etc/dovecot/global_script/rspamd-report-spam.sieve
+sievec /etc/dovecot/imapsieve/rspamd-report-spam.sieve
 
 ### Ham learning
-ynh_config_add --template="dovecot_rspamd-report-ham.sieve" --destination="/etc/dovecot/global_script/rspamd-report-ham.sieve"
+ynh_config_add --template="dovecot_rspamd-report-ham.sieve" --destination="/etc/dovecot/imapsieve/rspamd-report-ham.sieve"
 ynh_config_add --template="dovecot_rspamd-learn-ham.sh" --destination="/usr/lib/dovecot/sieve-pipe/rspamd-learn-ham.sh"
-sievec /etc/dovecot/global_script/rspamd-report-ham.sieve
+sievec /etc/dovecot/imapsieve/rspamd-report-ham.sieve
 
 ## Set permissions
-chown -R vmail:mail /etc/dovecot/global_script/
-chmod -R 750 /etc/dovecot/global_script/
-chmod -R 755 /usr/lib/dovecot/sieve-pipe/
+chown -R vmail:mail /etc/dovecot/global_script/ /etc/dovecot/imapsieve/
+chmod 750 /etc/dovecot/global_script/ /etc/dovecot/imapsieve/
+chmod 640 /etc/dovecot/global_script/* /etc/dovecot/imapsieve/*
+chmod 755 /usr/lib/dovecot/sieve-pipe/
+chmod 755 /usr/lib/dovecot/sieve-pipe/*
 
 #=================================================
 # REAPPLY SYSTEM CONFIGURATION
