@@ -14,3 +14,4 @@ test_format = 1.0
     # Upgrade from 3.14.2~ynh1 & 4.1.5~ynh1 is not possible on Trixie
     #test_upgrade_from.3224460b56498f0dc573c2e873aef595c911f880.name = "Upgrade from 3.14.2~ynh1"
     #test_upgrade_from.322275b213f64de11716e6ec39e2571c2ec24071.name = "Upgrade from 4.1.5~ynh1"
+    test_upgrade_from.59daa7880bfc4b4e3b120f30d8bd161157266466.name = "Upgrade from 4.2.0~ynh3"
