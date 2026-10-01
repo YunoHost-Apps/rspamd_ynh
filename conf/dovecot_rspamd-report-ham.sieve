@@ -1,5 +1,5 @@
 require ["vnd.dovecot.debug", "vnd.dovecot.pipe", "copy", "imapsieve", "environment", "variables"];
-debug_log "IMAPSieve ham: triggered";
+debug_log "IMAPSieve learn ham: triggered";
 
 if environment :matches "imap.mailbox" "*" {
   set "mailbox" "${1}";
