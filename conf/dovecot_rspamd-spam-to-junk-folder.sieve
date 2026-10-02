@@ -1,5 +1,4 @@
-require ["vnd.dovecot.debug", "fileinto"];
-debug_log "GLOBALSieve move spam to Junk: triggered";
+require ["fileinto"];
 
 ##
 ## Global spam filter
