@@ -28,7 +28,7 @@ then
     ynh_app_setting_set --key=min_learns --value=$min_learns
 fi
 
-if ynh_app_upgrading_from_version_before 4.2.0~ynh4
+if ynh_app_upgrading_from_version_before 4.2.1~ynh1
 then
     ynh_safe_rm "/etc/dovecot/global_script/rspamd-report-spam.sieve"
     ynh_safe_rm "/etc/dovecot/global_script/rspamd-report-spam.svbin"
