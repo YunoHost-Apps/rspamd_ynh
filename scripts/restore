@@ -4,6 +4,7 @@
 # IMPORT GENERIC HELPERS
 #=================================================
 
+source ../settings/scripts/_common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
@@ -40,6 +41,9 @@ yunohost tools regen-conf postfix
 ynh_restore "/etc/rspamd/local.d/redis.conf"
 ynh_restore "/etc/rspamd/local.d/classifier-bayes.conf"
 ynh_restore "/etc/rspamd/local.d/dkim_signing.conf"
+
+# The DKIM whitelist is generated from the restored setting
+_add_dkim_whitelist_conf
 
 chmod 644 /etc/rspamd/local.d/*
 
