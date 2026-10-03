@@ -39,6 +39,17 @@ yunohost tools regen-conf postfix
 
 ynh_restore "/etc/rspamd/local.d/redis.conf"
 ynh_restore "/etc/rspamd/local.d/classifier-bayes.conf"
+
+## Add the spam thresholds (config panel), unless actions.conf was written by hand
+ynh_app_setting_set_default --key=spam_reject --value=15
+ynh_app_setting_set_default --key=spam_add_header --value=6
+ynh_app_setting_set_default --key=spam_greylist --value=4
+if [[ ! -e /etc/rspamd/local.d/actions.conf ]] || grep -q "Managed by the YunoHost rspamd app" /etc/rspamd/local.d/actions.conf; then
+    ynh_config_add --template="rspamd_actions.conf" --destination="/etc/rspamd/local.d/actions.conf"
+else
+    ynh_print_warn "/etc/rspamd/local.d/actions.conf was not written by this app, leaving it alone: the spam thresholds of the config panel have no effect until you remove that file."
+fi
+
 ynh_restore "/etc/rspamd/local.d/dkim_signing.conf"
 
 chmod 644 /etc/rspamd/local.d/*
