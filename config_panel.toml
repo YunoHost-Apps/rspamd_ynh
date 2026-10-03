@@ -4,6 +4,40 @@ version = "1.0"
 name.en = "Rspamd configuration"
 services = ["__APP__"]
 
+    [main.thresholds]
+    name.en = "Spam thresholds"
+    name.fr = "Seuils de spam"
+
+        [main.thresholds.spam_reject]
+        type = "number"
+        ask.en = "Reject mails from this score on."
+        ask.fr = "Rejeter les mails à partir de ce score."
+        help.en = "Rspamd default: 15. Lower values reject more spam, but also more legitimate mail."
+        help.fr = "Valeur par défaut de Rspamd : 15. Des valeurs plus basses rejettent plus de spam, mais aussi plus de mails légitimes."
+        default = 15
+        min = 1
+        max = 100
+
+        [main.thresholds.spam_add_header]
+        type = "number"
+        ask.en = "Mark mails as spam (moved to Junk) from this score on."
+        ask.fr = "Marquer les mails comme spam (déplacés dans Junk) à partir de ce score."
+        help.en = "Rspamd default: 6. Must be between the greylisting and the reject threshold."
+        help.fr = "Valeur par défaut de Rspamd : 6. Doit être entre le seuil de greylisting et le seuil de rejet."
+        default = 6
+        min = 1
+        max = 100
+
+        [main.thresholds.spam_greylist]
+        type = "number"
+        ask.en = "Greylist mails (delay them) from this score on."
+        ask.fr = "Mettre en greylisting (retarder) les mails à partir de ce score."
+        help.en = "Rspamd default: 4. Must be lower than the add header threshold."
+        help.fr = "Valeur par défaut de Rspamd : 4. Doit être inférieur au seuil de marquage."
+        default = 4
+        min = 1
+        max = 100
+
     [main.customization]
 
         [main.customization.per_user]

@@ -21,8 +21,49 @@ get__min_learns() {
 }
 
 #=================================================
+# SPECIFIC VALIDATORS FOR TOML SHORT KEYS
+#=================================================
+
+validate__spam_reject() {
+    (( spam_reject > spam_add_header )) || echo "The reject threshold must be higher than the add header threshold."
+}
+
+validate__spam_add_header() {
+    (( spam_greylist < spam_add_header && spam_add_header < spam_reject )) || echo "The add header threshold must be between the greylisting and the reject threshold."
+}
+
+validate__spam_greylist() {
+    (( spam_greylist < spam_add_header )) || echo "The greylisting threshold must be lower than the add header threshold."
+}
+
+#=================================================
 # SPECIFIC SETTERS FOR TOML SHORT KEYS
 #=================================================
+
+_set_spam_thresholds() {
+    ynh_print_info "Saving the new spam thresholds in the Rspamd configuration..."
+    ynh_app_setting_set --key=spam_reject --value=$spam_reject
+    ynh_app_setting_set --key=spam_add_header --value=$spam_add_header
+    ynh_app_setting_set --key=spam_greylist --value=$spam_greylist
+    if [[ ! -e /etc/rspamd/local.d/actions.conf ]] || grep -q "Managed by the YunoHost rspamd app" /etc/rspamd/local.d/actions.conf; then
+        ynh_config_add --template="rspamd_actions.conf" --destination="/etc/rspamd/local.d/actions.conf"
+        chmod 644 /etc/rspamd/local.d/actions.conf
+    else
+        ynh_print_warn "/etc/rspamd/local.d/actions.conf was not written by this app, leaving it alone: the spam thresholds of the config panel have no effect until you remove that file."
+    fi
+}
+
+set__spam_reject() {
+    _set_spam_thresholds
+}
+
+set__spam_add_header() {
+    _set_spam_thresholds
+}
+
+set__spam_greylist() {
+    _set_spam_thresholds
+}
 
 set__per_user() {
     ynh_print_info "Saving the new per user classifier setting to $per_user in the Rspamd configuration..."
