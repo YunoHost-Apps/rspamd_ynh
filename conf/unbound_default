@@ -1,0 +1,7 @@
+# /etc/default/unbound
+# Keep unbound out of the system resolver setup, YunoHost's dnsmasq stays in charge:
+# - don't register unbound in /etc/resolv.conf through resolvconf
+# - don't make unbound forward to the system's upstream resolvers, rspamd needs
+#   full recursion (see /etc/resolvconf/update.d/unbound)
+RESOLVCONF=false
+USE_RESOLVCONF_FORWARDS=false

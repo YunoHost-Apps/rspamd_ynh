@@ -74,7 +74,7 @@ ram.runtime = "50M"
     # main.fixed = true
 
     [resources.apt]
-    packages = "redis-server, libhyperscan5, postfix, libsodium23, libsqlite3-0"
+    packages = "redis-server, libhyperscan5, postfix, libsodium23, libsqlite3-0, unbound"
     packages_from_raw_bash = """
     if [[ $YNH_DEBIAN_VERSION == "trixie" ]]; then
         echo "libssl3t64, libarchive13t64, libicu76, libbinutils"

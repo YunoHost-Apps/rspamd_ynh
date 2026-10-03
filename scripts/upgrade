@@ -82,6 +82,16 @@ ynh_config_add --template="rspamd_classifier-bayes.conf" --destination="/etc/rsp
 ## Add dkim_signing conf
 ynh_config_add --template="rspamd_dkim_signing.conf" --destination="/etc/rspamd/local.d/dkim_signing.conf"
 
+## Add a local recursive resolver for rspamd, DNS lists block YunoHost's shared public upstreams
+ynh_config_add --template="unbound_default" --destination="/etc/default/unbound"
+ynh_config_add --template="unbound_rspamd.conf" --destination="/etc/unbound/unbound.conf.d/rspamd.conf"
+chmod 644 /etc/default/unbound /etc/unbound/unbound.conf.d/rspamd.conf
+unbound-checkconf
+### The package starts unbound on port 53 right after installation, where dnsmasq already listens
+systemctl reset-failed unbound 2>/dev/null || true
+ynh_systemctl --service=unbound --action=restart
+ynh_config_add --template="rspamd_options.inc" --destination="/etc/rspamd/local.d/options.inc"
+
 ## Set permissions
 chmod 644 /etc/rspamd/local.d/*
 
@@ -127,6 +137,7 @@ chmod 755 /usr/lib/dovecot/sieve-pipe/*
 ynh_script_progression "Upgrading system configurations related to $app..."
 
 yunohost service add "$app" --description="Spam filtering system"
+yunohost service add unbound --description="Recursive DNS resolver for Rspamd"
 
 #=================================================
 # START SYSTEMD SERVICE
