@@ -4,6 +4,7 @@
 # IMPORT GENERIC HELPERS
 #=================================================
 
+source _common.sh
 source /usr/share/yunohost/helpers
 
 ynh_abort_if_errors
@@ -18,6 +19,10 @@ get__per_user() {
 
 get__min_learns() {
     ynh_app_setting_get --app=$app --key=min_learns
+}
+
+get__dkim_whitelist_domains() {
+    ynh_app_setting_get --app=$app --key=dkim_whitelist_domains
 }
 
 #=================================================
@@ -44,6 +49,12 @@ set__min_learns() {
         1) per_user_value="true" ;;
     esac
     ynh_config_add --template="rspamd_classifier-bayes.conf" --destination="/etc/rspamd/local.d/classifier-bayes.conf"
+}
+
+set__dkim_whitelist_domains() {
+    ynh_print_info "Saving the own domains whitelisted on a valid DKIM signature in the Rspamd configuration..."
+    ynh_app_setting_set --key=dkim_whitelist_domains --value="$dkim_whitelist_domains"
+    _add_dkim_whitelist_conf
 }
 
 #=================================================

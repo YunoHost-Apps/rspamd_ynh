@@ -19,3 +19,9 @@ services = ["__APP__"]
         default = 200
         min = 1
         max = 9999
+
+        [main.customization.dkim_whitelist_domains]
+        type = "tags"
+        ask.en = "Own domains whose mails with a valid DKIM signature are never classified as spam (e.g. web form mails)."
+        ask.fr = "Domaines propres dont les mails avec une signature DKIM valide ne sont jamais classés comme spam (ex. mails de formulaires web)."
+        optional = true
