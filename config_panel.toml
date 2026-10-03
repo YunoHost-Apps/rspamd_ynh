@@ -12,6 +12,22 @@ services = ["__APP__"]
         ask.fr = "Activer la classification par utilisateur."
         default = 0
 
+        [main.customization.autolearn]
+        type = "boolean"
+        ask.en = "Let the Bayes classifier learn automatically from incoming mail."
+        ask.fr = "Laisser le classificateur bayésien apprendre automatiquement des mails entrants."
+        help.en = "Mails scoring above the reject threshold are learned as spam, mails with a negative score as ham. Misclassified mails reinforce themselves, so keep an eye on it."
+        help.fr = "Les mails dépassant le seuil de rejet sont appris comme spam, ceux avec un score négatif comme ham. Les erreurs de classement se renforcent, gardez un œil dessus."
+        default = 0
+
+        [main.customization.reset_bayes]
+        type = "button"
+        ask.en = "Discard everything the Bayes classifier has learned"
+        ask.fr = "Effacer tout ce que le classificateur bayésien a appris"
+        help.en = "Deletes the Bayes tokens, learn counters and learn cache from Redis, for all users. Other Rspamd data in Redis is kept. Bayes stays inactive until it has learned min_learns spam and ham mails again."
+        help.fr = "Supprime de Redis les jetons bayésiens, les compteurs et le cache d'apprentissage, pour tous les utilisateurs. Les autres données de Rspamd dans Redis sont conservées. Bayes reste inactif jusqu'à ce qu'il ait de nouveau appris min_learns spams et hams."
+        style = "danger"
+
         [main.customization.min_learns]
         type = "number"
         ask.en = "Minimum learn to count for both spam and ham classes to perform classification."
