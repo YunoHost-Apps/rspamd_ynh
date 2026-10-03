@@ -14,6 +14,9 @@ ynh_script_progression "Removing system configurations related to $app..."
 if ynh_hide_warnings yunohost service status $app >/dev/null; then
     yunohost service remove $app
 fi
+if ynh_hide_warnings yunohost service status unbound >/dev/null; then
+    yunohost service remove unbound
+fi
 
 # Remove postfix conf tweak
 ynh_safe_rm "/usr/share/yunohost/hooks/conf_regen/99-postfix_rspamd"
@@ -23,6 +26,11 @@ yunohost tools regen-conf postfix
 ynh_safe_rm "/etc/rspamd/local.d/redis.conf"
 ynh_safe_rm "/etc/rspamd/local.d/classifier-bayes.conf"
 ynh_safe_rm "/etc/rspamd/local.d/dkim_signing.conf"
+
+# Remove the local recursive resolver for rspamd
+ynh_safe_rm "/etc/rspamd/local.d/options.inc"
+ynh_safe_rm "/etc/unbound/unbound.conf.d/rspamd.conf"
+ynh_safe_rm "/etc/default/unbound"
 
 # Remove dovecot conf
 ynh_safe_rm "/etc/dovecot/yunohost.d/post-ext.d/rspamd-learning.conf"

@@ -12,6 +12,7 @@ source /usr/share/yunohost/helpers
 ynh_script_progression "Restoring system configurations related to $app..."
 
 yunohost service add $app --description="Spam filtering system"
+yunohost service add unbound --description="Recursive DNS resolver for Rspamd"
 
 #=================================================
 # RESTORE VARIOUS FILES
@@ -41,6 +42,11 @@ ynh_restore "/etc/rspamd/local.d/redis.conf"
 ynh_restore "/etc/rspamd/local.d/classifier-bayes.conf"
 ynh_restore "/etc/rspamd/local.d/dkim_signing.conf"
 
+# Local recursive resolver for rspamd
+ynh_restore "/etc/rspamd/local.d/options.inc"
+ynh_restore "/etc/unbound/unbound.conf.d/rspamd.conf"
+ynh_restore "/etc/default/unbound"
+
 chmod 644 /etc/rspamd/local.d/*
 
 ynh_restore "/etc/dovecot/yunohost.d/post-ext.d/rspamd-learning.conf"
@@ -64,6 +70,9 @@ chmod 755 /usr/lib/dovecot/sieve-pipe/*
 ynh_script_progression "Starting systemd services..."
 
 ynh_systemctl --service=postfix --action=restart
+
+systemctl reset-failed unbound 2>/dev/null || true
+ynh_systemctl --service=unbound --action=restart
 
 ynh_systemctl --service=rspamd --action=restart
 
