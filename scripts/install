@@ -41,6 +41,13 @@ yunohost tools regen-conf postfix
 ## Add redis conf
 ynh_config_add --template="rspamd_redis.conf" --destination="/etc/rspamd/local.d/redis.conf"
 
+## Skip greylisting for the big mailbox providers, unless the list was written by hand
+if [[ ! -e /etc/rspamd/local.d/greylist-whitelist-domains.inc ]] || grep -q "Managed by the YunoHost rspamd app" /etc/rspamd/local.d/greylist-whitelist-domains.inc; then
+    ynh_config_add --template="rspamd_greylist-whitelist-domains.inc" --destination="/etc/rspamd/local.d/greylist-whitelist-domains.inc"
+else
+    ynh_print_warn "/etc/rspamd/local.d/greylist-whitelist-domains.inc was not written by this app, leaving it alone."
+fi
+
 ## Add per_user conf
 case "$per_user" in
     0) per_user_value="false" ;;
