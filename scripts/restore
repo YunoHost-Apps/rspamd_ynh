@@ -40,6 +40,7 @@ yunohost tools regen-conf postfix
 ynh_restore "/etc/rspamd/local.d/redis.conf"
 ynh_restore "/etc/rspamd/local.d/classifier-bayes.conf"
 ynh_restore "/etc/rspamd/local.d/dkim_signing.conf"
+ynh_restore "/etc/rspamd/local.d/options.inc"
 
 chmod 644 /etc/rspamd/local.d/*
 

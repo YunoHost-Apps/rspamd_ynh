@@ -51,6 +51,9 @@ ynh_config_add --template="rspamd_classifier-bayes.conf" --destination="/etc/rsp
 ## Add dkim_signing conf
 ynh_config_add --template="rspamd_dkim_signing.conf" --destination="/etc/rspamd/local.d/dkim_signing.conf"
 
+## Add general options (task timeout)
+ynh_config_add --template="rspamd_options.inc" --destination="/etc/rspamd/local.d/options.inc"
+
 ## Set permissions
 chmod 644 /etc/rspamd/local.d/*
 
