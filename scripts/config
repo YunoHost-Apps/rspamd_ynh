@@ -16,6 +16,10 @@ get__per_user() {
     ynh_app_setting_get --app=$app --key=per_user
 }
 
+get__autolearn() {
+    ynh_app_setting_get --app=$app --key=autolearn
+}
+
 get__min_learns() {
     ynh_app_setting_get --app=$app --key=min_learns
 }
@@ -32,7 +36,45 @@ set__per_user() {
         1) per_user_value="true" ;;
     esac
     min_learns=$(ynh_app_setting_get --key=min_learns)
+    autolearn=$(ynh_app_setting_get --key=autolearn)
+    case "$autolearn" in
+        0) autolearn_value="false" ;;
+        1) autolearn_value="true" ;;
+    esac
     ynh_config_add --template="rspamd_classifier-bayes.conf" --destination="/etc/rspamd/local.d/classifier-bayes.conf"
+}
+
+set__autolearn() {
+    ynh_print_info "Saving the new autolearn setting to $autolearn in the Rspamd configuration..."
+    ynh_app_setting_set --key=autolearn --value=$autolearn
+    case "$autolearn" in
+        0) autolearn_value="false" ;;
+        1) autolearn_value="true" ;;
+    esac
+    per_user=$(ynh_app_setting_get --key=per_user)
+    case "$per_user" in
+        0) per_user_value="false" ;;
+        1) per_user_value="true" ;;
+    esac
+    min_learns=$(ynh_app_setting_get --key=min_learns)
+    ynh_config_add --template="rspamd_classifier-bayes.conf" --destination="/etc/rspamd/local.d/classifier-bayes.conf"
+}
+
+run__reset_bayes() {
+    ynh_print_info "Discarding everything the Bayes classifier has learned..."
+    # Rspamd shares the Redis database with its other modules (greylisting, history, ...),
+    # so only delete the Bayes keys: the prefixes listed in BAYES_{SPAM,HAM}_keys
+    # ("RS", or "RS<recipient>" with per_user), their tokens "<prefix>_<number>",
+    # and the learn cache "learned_ids[X...]"
+    local prefixes prefix pattern
+    prefixes=$(redis-cli --raw SUNION BAYES_SPAM_keys BAYES_HAM_keys)
+    for prefix in $prefixes; do
+        pattern="$(echo "$prefix" | sed 's/[][*?\\]/\\&/g')_[0-9]*"
+        redis-cli --scan --pattern "$pattern" | xargs -r -d '\n' -n 1000 redis-cli DEL >/dev/null
+        redis-cli DEL "$prefix" "${prefix}_z" >/dev/null
+    done
+    redis-cli DEL BAYES_SPAM_keys BAYES_HAM_keys learned_ids learned_idsX learned_idsXX learned_idsXXX learned_idsXXXX learned_idsXXXXX >/dev/null
+    ynh_systemctl --service=rspamd --action=restart
 }
 
 set__min_learns() {
@@ -42,6 +84,11 @@ set__min_learns() {
     case "$per_user" in
         0) per_user_value="false" ;;
         1) per_user_value="true" ;;
+    esac
+    autolearn=$(ynh_app_setting_get --key=autolearn)
+    case "$autolearn" in
+        0) autolearn_value="false" ;;
+        1) autolearn_value="true" ;;
     esac
     ynh_config_add --template="rspamd_classifier-bayes.conf" --destination="/etc/rspamd/local.d/classifier-bayes.conf"
 }
