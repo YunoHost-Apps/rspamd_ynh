@@ -52,7 +52,7 @@ ynh_config_add --template="rspamd_classifier-bayes.conf" --destination="/etc/rsp
 ynh_config_add --template="rspamd_dkim_signing.conf" --destination="/etc/rspamd/local.d/dkim_signing.conf"
 
 ## Set permissions
-chmod 644 /etc/rspamd/local.d/*
+find /etc/rspamd/local.d -maxdepth 1 -type f -exec chmod 644 {} +
 
 # Add dovecot conf
 ## Create sieve directories

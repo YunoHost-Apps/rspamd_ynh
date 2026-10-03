@@ -41,7 +41,7 @@ ynh_restore "/etc/rspamd/local.d/redis.conf"
 ynh_restore "/etc/rspamd/local.d/classifier-bayes.conf"
 ynh_restore "/etc/rspamd/local.d/dkim_signing.conf"
 
-chmod 644 /etc/rspamd/local.d/*
+find /etc/rspamd/local.d -maxdepth 1 -type f -exec chmod 644 {} +
 
 ynh_restore "/etc/dovecot/yunohost.d/post-ext.d/rspamd-learning.conf"
 ynh_restore "/etc/dovecot/global_script/rspamd-spam-to-junk-folder.sieve"
