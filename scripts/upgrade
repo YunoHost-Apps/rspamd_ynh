@@ -82,6 +82,14 @@ ynh_config_add --template="rspamd_classifier-bayes.conf" --destination="/etc/rsp
 ## Add dkim_signing conf
 ynh_config_add --template="rspamd_dkim_signing.conf" --destination="/etc/rspamd/local.d/dkim_signing.conf"
 
+## Never classify outgoing mail (SMTP AUTH / local submission) as spam,
+## unless settings.conf was written by hand
+if [[ ! -e /etc/rspamd/local.d/settings.conf ]] || grep -q "Managed by the YunoHost rspamd app" /etc/rspamd/local.d/settings.conf; then
+    ynh_config_add --template="rspamd_settings.conf" --destination="/etc/rspamd/local.d/settings.conf"
+else
+    ynh_print_warn "/etc/rspamd/local.d/settings.conf was not written by this app, leaving it alone."
+fi
+
 ## Set permissions
 chmod 644 /etc/rspamd/local.d/*
 

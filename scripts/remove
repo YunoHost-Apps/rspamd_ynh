@@ -23,6 +23,9 @@ yunohost tools regen-conf postfix
 ynh_safe_rm "/etc/rspamd/local.d/redis.conf"
 ynh_safe_rm "/etc/rspamd/local.d/classifier-bayes.conf"
 ynh_safe_rm "/etc/rspamd/local.d/dkim_signing.conf"
+if grep -qs "Managed by the YunoHost rspamd app" /etc/rspamd/local.d/settings.conf; then
+    ynh_safe_rm "/etc/rspamd/local.d/settings.conf"
+fi
 
 # Remove dovecot conf
 ynh_safe_rm "/etc/dovecot/yunohost.d/post-ext.d/rspamd-learning.conf"
