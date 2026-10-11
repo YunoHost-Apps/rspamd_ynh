@@ -2,6 +2,7 @@ name: Update Rspamd deb URLs and checksums
 
 on:
   create:
+  workflow_dispatch:
 
 permissions:
   contents: write
