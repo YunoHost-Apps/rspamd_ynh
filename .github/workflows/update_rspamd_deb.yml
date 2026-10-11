@@ -15,8 +15,9 @@ jobs:
   update-manifest:
     name: Update manifest.toml
     if: >-
-      github.event.ref_type == 'branch' &&
-      startsWith(github.event.ref, 'ci-auto-update-')
+      github.event_name == 'workflow_dispatch' || 
+      (github.event.ref_type == 'branch' &&
+      startsWith(github.event.ref, 'ci-auto-update-'))
     runs-on: ubuntu-latest
 
     env:
