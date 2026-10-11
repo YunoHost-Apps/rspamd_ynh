@@ -123,9 +123,9 @@ def update_deb_url(
     Example:
         4.2.1-1~b7a16ae~trixie
     becomes:
-        4.2.1~a1b2c3d~trixie
+        4.2.2-1~a5bf035~trixie
     """
-    replacement = f"{version}~{short_commit}"
+    replacement = f"{version}-1~{short_commit}"
     pattern = re.compile(
         rf"(?<=rspamd_)[^/\"']+?"
         rf"(?=~{re.escape(distribution)}_)"
