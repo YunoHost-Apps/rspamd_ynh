@@ -15,8 +15,9 @@ jobs:
   update-manifest:
     name: Update manifest.toml
     if: >-
-      github.event.ref_type == 'branch' &&
-      startsWith(github.event.ref, 'ci-auto-update-')
+      github.event_name == 'workflow_dispatch' || 
+      (github.event.ref_type == 'branch' &&
+      startsWith(github.event.ref, 'ci-auto-update-'))
     runs-on: ubuntu-latest
 
     env:
@@ -25,7 +26,7 @@ jobs:
 
     steps:
       - name: Checkout the newly created branch
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           ref: ${{ github.event.ref }}
           fetch-depth: 0
@@ -34,7 +35,7 @@ jobs:
         run: python3 -m pip install --disable-pip-version-check --no-input requests tomlkit
 
       - name: Update Debian URLs and checksums
-        run: python3 workflows/update_rspamd_deb.py
+        run: python3 .github/workflows/update_rspamd_deb.py
 
       - name: Show manifest diff
         run: git diff -- manifest.toml
