@@ -54,18 +54,18 @@ ram.runtime = "50M"
     autoupdate.strategy = "latest_github_release"
 
     [resources.sources.deb_trixie]
-    amd64.url = "https://rspamd.com/apt-stable/pool/main/r/rspamd/rspamd_4.2.2-1~a5bf035~trixie_amd64.deb"
-    amd64.sha256 = "27adbb5b36bc89c8632a3d5142c96d1db300160b111f9273e6314e878b347cc6"
-    arm64.url = "https://rspamd.com/apt-stable/pool/main/r/rspamd/rspamd_4.2.2-1~a5bf035~trixie_arm64.deb"
-    arm64.sha256 = "b37ba6868fb86376d19da9dd3662fdc4a0cbdd5c9bcd46864db9e0567530aa0e"
+    amd64.url = "https://rspamd.com/apt-stable/pool/main/r/rspamd/rspamd_4.2.3-1~50bde75~trixie_amd64.deb"
+    amd64.sha256 = "1ac8960ef414aa39662a44ca7cecc2daf5f7642f7af377cc188171870a001803"
+    arm64.url = "https://rspamd.com/apt-stable/pool/main/r/rspamd/rspamd_4.2.3-1~50bde75~trixie_arm64.deb"
+    arm64.sha256 = "97494e207fdcbf4bbe5cef9aab3d67a097220cd768060db3d8f9a954c4020d82"
     extract = false
     rename = "rspamd.deb"
 
     [resources.sources.deb_bookworm]
-    amd64.url = "https://rspamd.com/apt-stable/pool/main/r/rspamd/rspamd_4.2.2-1~a5bf035~bookworm_amd64.deb"
-    amd64.sha256 = "6758af6ad78cb4bc11182bc66e1d91c3b706a03b4b6ab25ecca11f2f7e9927fd"
-    arm64.url = "https://rspamd.com/apt-stable/pool/main/r/rspamd/rspamd_4.2.2-1~a5bf035~bookworm_arm64.deb"
-    arm64.sha256 = "015fe686fb464defba71d9842b57bb3ff37a9dd369c4361e8faa11dd6a72741c"
+    amd64.url = "https://rspamd.com/apt-stable/pool/main/r/rspamd/rspamd_4.2.3-1~50bde75~bookworm_amd64.deb"
+    amd64.sha256 = "ac46ae8e6f26b72308605f8eaa526590185b29e336920b7defa464d09fe229a0"
+    arm64.url = "https://rspamd.com/apt-stable/pool/main/r/rspamd/rspamd_4.2.3-1~50bde75~bookworm_arm64.deb"
+    arm64.sha256 = "70d563a730fbf133d26e62f428b0d845088470f5d366adc49f92f94955b93c3f"
     extract = false
     rename = "rspamd.deb"
 
