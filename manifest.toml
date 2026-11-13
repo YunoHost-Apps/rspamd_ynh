@@ -7,7 +7,7 @@ name = "Rspamd"
 description.en = "Spam filtering system"
 description.fr = "Système pour filtrer les spams"
 
-version = "4.2.3~ynh1"
+version = "4.3.0~ynh1"
 
 maintainers = []
 
@@ -48,8 +48,8 @@ ram.runtime = "50M"
 [resources]
     [resources.sources.main]
     # Just used for autoupdate alert
-    url = "https://github.com/rspamd/rspamd/archive/refs/tags/4.2.3.tar.gz"
-    sha256 = "9e75cad61e39ba93ebbfb85674ff9862aa5b1873f1bd80e96edc6c823b011702"
+    url = "https://github.com/rspamd/rspamd/archive/refs/tags/4.3.0.tar.gz"
+    sha256 = "29e0e64c0e2a9eeba41f47a149cd3739e0671a8bf67ec37cb46b4933d40068a4"
 
     autoupdate.strategy = "latest_github_release"
 
