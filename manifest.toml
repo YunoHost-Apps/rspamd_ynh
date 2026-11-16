@@ -7,7 +7,7 @@ name = "Rspamd"
 description.en = "Spam filtering system"
 description.fr = "Système pour filtrer les spams"
 
-version = "4.2.3~ynh1"
+version = "4.3.0~ynh1"
 
 maintainers = []
 
@@ -48,24 +48,24 @@ ram.runtime = "50M"
 [resources]
     [resources.sources.main]
     # Just used for autoupdate alert
-    url = "https://github.com/rspamd/rspamd/archive/refs/tags/4.2.3.tar.gz"
-    sha256 = "9e75cad61e39ba93ebbfb85674ff9862aa5b1873f1bd80e96edc6c823b011702"
+    url = "https://github.com/rspamd/rspamd/archive/refs/tags/4.3.0.tar.gz"
+    sha256 = "29e0e64c0e2a9eeba41f47a149cd3739e0671a8bf67ec37cb46b4933d40068a4"
 
     autoupdate.strategy = "latest_github_release"
 
     [resources.sources.deb_trixie]
-    amd64.url = "https://rspamd.com/apt-stable/pool/main/r/rspamd/rspamd_4.2.3-1~50bde75~trixie_amd64.deb"
-    amd64.sha256 = "1ac8960ef414aa39662a44ca7cecc2daf5f7642f7af377cc188171870a001803"
-    arm64.url = "https://rspamd.com/apt-stable/pool/main/r/rspamd/rspamd_4.2.3-1~50bde75~trixie_arm64.deb"
-    arm64.sha256 = "97494e207fdcbf4bbe5cef9aab3d67a097220cd768060db3d8f9a954c4020d82"
+    amd64.url = "https://rspamd.com/apt-stable/pool/main/r/rspamd/rspamd_4.3.0-1~25c9ecc~trixie_amd64.deb"
+    amd64.sha256 = "f188cc4a2500ac3b14f5ee0da21143556daf4a23c323d17893291e47009453ac"
+    arm64.url = "https://rspamd.com/apt-stable/pool/main/r/rspamd/rspamd_4.3.0-1~25c9ecc~trixie_arm64.deb"
+    arm64.sha256 = "834b597d49ce0bd78dae7bb4502b494ca48323d416f1f3b1f6c623aee9c21843"
     extract = false
     rename = "rspamd.deb"
 
     [resources.sources.deb_bookworm]
-    amd64.url = "https://rspamd.com/apt-stable/pool/main/r/rspamd/rspamd_4.2.3-1~50bde75~bookworm_amd64.deb"
-    amd64.sha256 = "ac46ae8e6f26b72308605f8eaa526590185b29e336920b7defa464d09fe229a0"
-    arm64.url = "https://rspamd.com/apt-stable/pool/main/r/rspamd/rspamd_4.2.3-1~50bde75~bookworm_arm64.deb"
-    arm64.sha256 = "70d563a730fbf133d26e62f428b0d845088470f5d366adc49f92f94955b93c3f"
+    amd64.url = "https://rspamd.com/apt-stable/pool/main/r/rspamd/rspamd_4.3.0-1~25c9ecc~bookworm_amd64.deb"
+    amd64.sha256 = "e752493fe069d7876284136bc3b20b999d256153f5149cdfa18137e062222e2c"
+    arm64.url = "https://rspamd.com/apt-stable/pool/main/r/rspamd/rspamd_4.3.0-1~25c9ecc~bookworm_arm64.deb"
+    arm64.sha256 = "32316fd212ccdcc93639e6d75a0f2a9452ed1c12dda5abe891e2c91045a1cc64"
     extract = false
     rename = "rspamd.deb"
 
